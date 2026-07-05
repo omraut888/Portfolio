@@ -1,0 +1,290 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #030308;
+  --foreground: #ffffff;
+  --gold: #f0c060;
+  --violet: #7040c0;
+  --cyan: #00e5ff;
+  --chrome: #c8d0e0;
+  --rust: #00e5ff;
+  --amber: #f0c060;
+  --navy: #060318;
+  --ink: #030308;
+  --s1: #101010; --s2: #141414; --s3: #1a1a1a;
+  --s4: #202020; --s5: #282828; --s6: #303030;
+  --t1: #efefef; --t2: #9a9a9a; --t3: #555555; --t4: #303030;
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: #030308;
+}
+
+body {
+  background: #030308;
+  color: #ffffff;
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.8;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Hide default cursor globally */
+*, *::before, *::after {
+  cursor: none !important;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: #030308;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #7040c0, #00e5ff);
+  border-radius: 2px;
+}
+
+/* Glass card utility */
+@layer components {
+  .glass {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .glass-strong {
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .text-shimmer {
+    background: linear-gradient(
+      90deg,
+      #ffffff 0%,
+      #00e5ff 25%,
+      #ffffff 50%,
+      #f0c060 75%,
+      #ffffff 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s linear infinite;
+  }
+
+  .text-blue-gradient {
+    background: linear-gradient(135deg, #00e5ff, #f0c060);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glow-blue {
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.4), 0 0 60px rgba(0, 229, 255, 0.1);
+  }
+
+  .glow-purple {
+    box-shadow: 0 0 20px rgba(112, 64, 192, 0.4), 0 0 60px rgba(112, 64, 192, 0.1);
+  }
+
+  .btn-magnetic {
+    position: relative;
+    transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    will-change: transform;
+  }
+
+  .section-heading {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 6vw, 80px);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+}
+
+/* Shimmer keyframe */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* Noise texture overlay */
+.noise-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Gradient border trick */
+.gradient-border {
+  position: relative;
+  background: #030308;
+}
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, #7040c0, #00e5ff, #f0c060);
+  background-size: 200% 200%;
+  animation: shimmer 3s linear infinite;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.gradient-border:hover::before {
+  opacity: 1;
+}
+
+/* 3D tilt card */
+.tilt-card {
+  transform-style: preserve-3d;
+  transition: transform 0.1s ease;
+}
+
+/* Ripple animation */
+@keyframes ripple {
+  0% { transform: scale(0); opacity: 0.4; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(0, 229, 255, 0.3);
+  animation: ripple 0.6s linear;
+  pointer-events: none;
+}
+
+/* Section transitions — keep sections stacked above the fixed canvas background */
+section {
+  position: relative;
+  z-index: 1;
+}
+
+/* Floating badge animations */
+@keyframes orbitBadge {
+  0% { transform: rotate(var(--start-angle)) translateX(90px) rotate(calc(-1 * var(--start-angle))); }
+  100% { transform: rotate(calc(var(--start-angle) + 360deg)) translateX(90px) rotate(calc(-1 * (var(--start-angle) + 360deg))); }
+}
+
+/* Page load animation */
+@keyframes slideReveal {
+  0% { transform: translateY(0%); }
+  100% { transform: translateY(-100%); }
+}
+
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(40px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Mobile: restore cursor */
+@media (max-width: 768px) {
+  body { cursor: auto; }
+  *, *::before, *::after { cursor: auto !important; }
+}
+
+/* Cursor blink (referenced in Tailwind arbitrary animate) */
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Skill index dot pulse (on hover) */
+@keyframes skillPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.7); }
+}
+
+/* X-ray scan sweep for About portrait */
+@keyframes xrayScan {
+  0%   { top: -6%;  opacity: 0; }
+  8%   { opacity: 1; }
+  92%  { opacity: 1; }
+  100% { top: 104%; opacity: 0; }
+}
+
+.xray-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  top: -6%;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, #00e5ff, #a0f4ff, #00e5ff, transparent);
+  box-shadow: 0 0 18px 4px rgba(0, 229, 255, 0.65);
+  z-index: 5;
+}
+
+.xray-photo {
+  transition: filter 0.5s var(--ease);
+}
+
+.group:hover .xray-line {
+  animation: xrayScan 1.8s ease-in-out infinite;
+}
+
+.group:hover .xray-photo {
+  filter: grayscale(1) contrast(1.15) brightness(0.9);
+}
+
+/* Skills ticker scroll */
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Spinning vinyl record (Contact) */
+@keyframes vinylSpin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.vinyl-disc {
+  animation: vinylSpin 8s linear infinite;
+  will-change: transform;
+}
+.vinyl-record:hover .vinyl-disc {
+  animation-duration: 2s;
+}
+
+/* Glow pulse for about section rings */
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(0, 229, 255, 0.3), 0 0 60px rgba(0, 229, 255, 0.1); }
+  50% { box-shadow: 0 0 40px rgba(0, 229, 255, 0.6), 0 0 100px rgba(0, 229, 255, 0.2); }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
