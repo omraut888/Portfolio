@@ -8,7 +8,7 @@ import { ClipReveal, WordReveal, LineDraw } from "./Reveal";
 const TERMINAL_LINES = [
   { cmd: "whoami",    out: "Om Raut, AI Engineer"                   },
   { cmd: "location",  out: "Boston, MA"                              },
-  { cmd: "status",    out: "Building production AI @ The Ticker App" },
+  { cmd: "status",    out: "Open to opportunities — AI/ML, RAG, agentic systems" },
   { cmd: "education", out: "MS Information Systems, Northeastern 2026" },
   { cmd: "stack",     out: "LangGraph · Qdrant · FastAPI · PyTorch"  },
 ];
@@ -187,9 +187,9 @@ export default function About() {
               parts: latency, evaluation, and correctness at the boundaries.
             </p>
             <p style={{ width: "100%", margin: 0, fontSize: 17, lineHeight: 1.8, color: "rgba(255,255,255,0.62)" }}>
-              Currently building AI at{" "}
-              <span style={{ color: "#00e5ff" }}>The Ticker App</span>, where I ship
-              retrieval and multi-agent infrastructure that reaches real users.
+              Previously built AI at{" "}
+              <span style={{ color: "#00e5ff" }}>The Ticker App</span> (Feb 2026 – Aug 2026),
+              where I shipped retrieval and multi-agent infrastructure that reached real users.
             </p>
           </motion.div>
 

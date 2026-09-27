@@ -10,7 +10,7 @@ interface ExperienceItem {
   date: string;
   location: string;
   color: string;
-  badge: string;
+  badge?: string;
   bullets: string[];
   stat: string;
   statLabel: string;
@@ -20,12 +20,11 @@ const experiences: ExperienceItem[] = [
   {
     company: "The Ticker App, Inc.",
     role: "AI Developer Co-op",
-    date: "Feb 2026 – Present",
+    date: "Feb 2026 – Aug 2026",
     location: "Boston, MA",
     color: "#00e5ff",
-    badge: "Current",
     bullets: [
-      "Production RAG pipeline: Voyage AI embeddings, hierarchical K-means/DBSCAN clustering over 10B+ vectors in Qdrant, MMR re-ranking via LangGraph + FastAPI",
+      "Built production RAG pipeline: Voyage AI embeddings, hierarchical K-means/DBSCAN clustering over 10B+ vectors in Qdrant, MMR re-ranking via LangGraph + FastAPI",
       "Authored technical PRD for MCP-integrated multi-agent system using Gemini 2.0 Flash with dynamic tool-calling and context injection across agent boundaries",
       "Designed embedding-based FAQ clustering and prompt data collection pipelines to surface high-frequency user intents for fine-tuning feedback loops",
     ],
@@ -128,15 +127,17 @@ function TimelineCard({
                 >
                   {item.role}
                 </span>
-                <span
-                  className="text-xs font-semibold px-2 py-0.5 rounded-full"
-                  style={{
-                    background: "rgba(255,255,255,0.06)",
-                    color: "rgba(255,255,255,0.5)",
-                  }}
-                >
-                  {item.badge}
-                </span>
+                {item.badge && (
+                  <span
+                    className="text-xs font-semibold px-2 py-0.5 rounded-full"
+                    style={{
+                      background: "rgba(255,255,255,0.06)",
+                      color: "rgba(255,255,255,0.5)",
+                    }}
+                  >
+                    {item.badge}
+                  </span>
+                )}
               </div>
             </div>
 

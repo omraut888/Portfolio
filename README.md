@@ -10,7 +10,7 @@
 
 ## About
 
-I'm an AI/ML Engineer and MS Information Systems candidate at Northeastern University (Dec 2026), currently building production AI infrastructure at The Ticker App in Boston. My work spans RAG pipelines, multi-agent orchestration, and LLM-powered applications that hold up under real traffic.
+I'm an AI/ML Engineer and MS Information Systems candidate at Northeastern University (Dec 2026), based in Boston. I previously built production AI infrastructure at The Ticker App (Feb 2026 – Aug 2026). My work spans RAG pipelines, multi-agent orchestration, and LLM-powered applications that hold up under real traffic.
 
 This portfolio is not a template. It's a ground-up, production-grade Next.js application built with the same engineering standards I apply to every system I ship — clean architecture, real animations, and zero shortcuts.
 
@@ -87,25 +87,28 @@ portfolio/
 
 ## Featured Projects
 
-### CodeGen AI
-5-agent LangGraph pipeline automating the full software development lifecycle. Generator → Reviewer → Tester → Documenter → Optimizer. 89% code quality, 60% faster generation, 92% test pass rate.
+### MERIDIAN
+Hybrid RAG pipeline built for production-grade retrieval. Hierarchical K-means/DBSCAN clustering and MMR re-ranking over Qdrant + Voyage AI embeddings, with an eval harness (dense-only vs hybrid vs cluster-routing vs MMR) that let the numbers decide the shipped default.
 
-**Stack:** LangGraph · FastAPI · PostgreSQL · Docker · Apache Airflow · Pinecone
+**Stack:** Qdrant · Voyage AI · FastAPI · MMR re-ranking
+**Status:** Public · PolyForm Strict license — [github.com/omraut888/meridian](https://github.com/omraut888/meridian)
 
-### AURELIA
-Financial RAG system achieving 86.7% retrieval accuracy across a 3,462-page corpus. Hybrid dense + keyword retrieval outperforming single-strategy baseline by 23%.
+### UMBRA
+RAG coverage diagnostics that map blind spots in retrieval systems. Synthetic probe queries are scored for retrieval confidence, semantic entropy, and hallucination probability; failures are clustered into "dark zones."
 
-**Stack:** ChromaDB · FastAPI · Streamlit · Apache Airflow · Python
+**Stack:** UMAP + HDBSCAN · synthetic probe generation
+**Status:** In Progress
 
-### ORBIT v2
-Multi-agent PE intelligence platform with LangGraph Human-in-the-Loop workflows. MCP integration with live tool-calling across agent boundaries. 97%+ test coverage.
+### INVARIANT
+Autonomous quant research pipeline — causal signal discovery to portfolio construction, with information-theoretic decay validation, adversarial regime certification, and LLM-generated research memos.
 
-**Stack:** LangGraph · MCP · FastAPI · ChromaDB · Apache Airflow
+**Stack:** Causal discovery · DRO optimization · LLM memo generation
+**Status:** Planned — next build
 
-### Ticker GPT
-Live ChatGPT Store GPT for social investing education. 4-module curriculum backed by a production Qdrant RAG endpoint.
+### SENTINEL-X
+A cross-modal AI system that flags when a company's own earnings-call statements and its SEC filings quietly contradict each other, and checks its stated guidance against what the real financial data actually supports.
 
-**Stack:** GPT Builder · Qdrant · LangGraph · RAG
+**Status:** Private · Repo release pending
 
 ---
 

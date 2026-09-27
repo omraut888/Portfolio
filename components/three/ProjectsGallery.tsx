@@ -10,8 +10,12 @@ interface Project {
   title: string;
   tagline: string;
   color: string;
+  status: string;
+  /** Public repo URL. Omit for private / unreleased projects. */
+  repo?: string;
   metrics: Metric[];
-  detail: {
+  /** Omit for projects with no public details yet — the row renders as "Coming Soon". */
+  detail?: {
     problem: string;
     architecture: string;
     innovation: string;
@@ -21,72 +25,66 @@ interface Project {
 
 const PROJECTS: Project[] = [
   {
-    id: "codegen",
-    title: "CodeGen AI",
-    tagline: "5-agent system automating the full software dev lifecycle",
-    color: "#2563eb",
-    metrics: [
-      { value: "89%", label: "Code Quality" },
-      { value: "60%", label: "Faster Generation" },
-      { value: "92%", label: "Test Pass Rate" },
-    ],
-    detail: {
-      problem: "Manual code review cycles waste 60%+ of developer time. Repetitive generation-review loops create bottlenecks that slow shipping velocity and increase error rates in production.",
-      architecture: "A 5-agent pipeline — Generate → Review → Test → Document → Optimize — orchestrated in LangGraph with Pydantic-typed handoffs. Airflow ingests from GitHub/StackOverflow; Pinecone stores embeddings.",
-      innovation: "RAG pipeline with semantic chunking orchestrated by LangGraph. Schema validation at every agent boundary stops early errors from amplifying through the chain.",
-      stack: ["LangGraph", "FastAPI", "PostgreSQL", "Docker", "Airflow", "Pinecone"],
-    },
-  },
-  {
-    id: "aurelia",
-    title: "AURELIA",
-    tagline: "Financial RAG system with 86.7% retrieval accuracy",
-    color: "#7040c0",
-    metrics: [
-      { value: "86.7%", label: "Retrieval" },
-      { value: "+23%", label: "Over Baseline" },
-      { value: "3,462", label: "Pages Processed" },
-    ],
-    detail: {
-      problem: "A 3,462-page financial manual is impossible to query accurately with standard search — dense-only retrieval misses keyword matches, keyword-only misses semantic context.",
-      architecture: "Multi-strategy chunking feeds ChromaDB for dense retrieval plus BM25 for keywords, with a Wikipedia fallback for out-of-manual context. FastAPI + Streamlit frontend, Airflow ETL.",
-      innovation: "Hybrid dense + keyword retrieval with Reciprocal Rank Fusion, outperforming the single-strategy dense baseline by 23% on a 500-question test set.",
-      stack: ["ChromaDB", "FastAPI", "Streamlit", "Airflow", "Python", "BM25"],
-    },
-  },
-  {
-    id: "orbit",
-    title: "ORBIT v2",
-    tagline: "Multi-agent PE intelligence with Human-in-the-Loop gates",
+    id: "meridian",
+    title: "MERIDIAN",
+    tagline: "Hybrid RAG pipeline built for production-grade retrieval",
     color: "#00e5ff",
+    status: "Public · PolyForm Strict license",
+    repo: "https://github.com/omraut888/meridian",
     metrics: [
-      { value: "97%+", label: "Test Coverage" },
-      { value: "<500ms", label: "Agent Step" },
-      { value: "~15%", label: "HITL Catch Rate" },
+      { value: "Hybrid", label: "K-means/DBSCAN" },
+      { value: "Dense+Sparse", label: "Retrieval Eval" },
+      { value: "MMR", label: "Re-ranking" },
     ],
     detail: {
-      problem: "Private equity research requires synthesizing hundreds of data points per deal. Manual first-pass analysis is the bottleneck — analysts spend 80% of their time gathering data.",
-      architecture: "A LangGraph state machine with conditional edges — Research → Analysis → HITL Checkpoint → Recommendation — using ReAct reasoning. ChromaDB stores deal memory; Airflow orchestrates pipelines.",
-      innovation: "MCP integration with live tool-calling across agent boundaries, plus HITL gates that pause the graph for review then resume from exact checkpoint state.",
-      stack: ["LangGraph", "MCP", "FastAPI", "ChromaDB", "Airflow", "ReAct"],
+      problem: "Naive vector search misses relevant results when queries are ambiguous or results cluster around near-duplicates.",
+      architecture: "Qdrant + Voyage AI embeddings, hierarchical K-means/DBSCAN clustering, MMR re-ranking, FastAPI serving layer, with a generation module for cited, streamed answers.",
+      innovation: "An eval harness (dense-only vs hybrid vs cluster-routing vs MMR) that let the numbers decide the default — cluster routing is built and tested but shipped off by default based on those results.",
+      stack: ["Qdrant", "Voyage AI", "FastAPI", "MMR re-ranking"],
     },
   },
   {
-    id: "ticker-gpt",
-    title: "Ticker GPT",
-    tagline: "ChatGPT Store GPT for social investing education",
-    color: "#f0c060",
+    id: "umbra",
+    title: "UMBRA",
+    tagline: "RAG coverage diagnostics — maps blind spots in retrieval systems",
+    color: "#7040c0",
+    status: "In Progress",
     metrics: [
-      { value: "4", label: "Modules" },
-      { value: "Live", label: "On GPT Store" },
-      { value: "RAG", label: "Backend Active" },
+      { value: "Confidence", label: "Retrieval Scoring" },
+      { value: "Entropy", label: "Semantic Signal" },
+      { value: "Dark Zones", label: "Failure Clusters" },
     ],
     detail: {
-      problem: "Retail investors lack structured, accessible AI-powered education. Existing tools either give generic (risky) advice or are too complex for beginners.",
-      architecture: "GPT Builder custom instructions with function-calling into a live Qdrant RAG backend, scoped to a 4-module curriculum with guardrails enforcing regulatory compliance.",
-      innovation: "First social investing GPT with a live vector backend on the ChatGPT Store — curriculum-scoped retrieval keeps responses educational and compliant.",
-      stack: ["GPT Builder", "RAG", "LangGraph", "Qdrant", "FastAPI"],
+      problem: "RAG systems fail silently — you don't know where your retrieval has blind spots until a user hits one.",
+      architecture: "Synthetic probe queries scored for retrieval confidence, semantic entropy, and hallucination probability; failures clustered via UMAP + HDBSCAN into \"dark zones.\"",
+      innovation: "Validates the coverage scorer against a synthetic knowledge base with known ground truth before wiring up any live production endpoint — accuracy checked before it ever touches real data.",
+      stack: ["UMAP + HDBSCAN", "Synthetic probe generation"],
     },
+  },
+  {
+    id: "invariant",
+    title: "INVARIANT",
+    tagline: "Autonomous quant research pipeline — causal signal discovery to portfolio construction",
+    color: "#f0c060",
+    status: "Planned — next build",
+    metrics: [
+      { value: "Decay", label: "Validation" },
+      { value: "Adversarial", label: "Regime Certification" },
+    ],
+    detail: {
+      problem: "Most \"quant AI\" pipelines find signals that decay the moment they're deployed.",
+      architecture: "A closed-loop system — causal signal discovery, information-theoretic decay validation, distributionally robust portfolio construction, adversarial regime certification.",
+      innovation: "LLM-generated research memos turn each cycle's output into a human-readable investment thesis, not just a number.",
+      stack: ["Causal discovery", "DRO optimization", "LLM memo generation"],
+    },
+  },
+  {
+    id: "sentinel-x",
+    title: "SENTINEL-X",
+    tagline: "A cross-modal AI system that flags when a company's own earnings-call statements and its SEC filings quietly contradict each other, and checks its stated guidance against what the real financial data actually supports.",
+    color: "#2563eb",
+    status: "Private · Repo release pending",
+    metrics: [],
   },
 ];
 
@@ -127,7 +125,8 @@ function ProjectCard({
 }) {
   const [hover, setHover] = useState(false);
   const num = String(index + 1).padStart(2, "0");
-  const active = hover || isExpanded;
+  const hasDetail = !!project.detail;
+  const active = hasDetail && (hover || isExpanded);
 
   return (
     <motion.div
@@ -141,13 +140,13 @@ function ProjectCard({
     >
       {/* ── Row header (click anywhere to toggle) ── */}
       <div
-        onClick={onToggle}
+        onClick={hasDetail ? onToggle : undefined}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         className="flex items-start gap-6 md:gap-12"
         style={{
           position: "relative",
-          cursor: "pointer",
+          cursor: hasDetail ? "pointer" : "default",
           padding: "clamp(24px, 3.5vw, 44px) clamp(14px, 2.5vw, 36px)",
           borderLeft: `3px solid ${active ? project.color : "transparent"}`,
           background: active ? "rgba(255,255,255,0.025)" : "transparent",
@@ -189,6 +188,9 @@ function ProjectCard({
         </div>
 
         <div className="hidden md:flex flex-col items-end gap-2 flex-shrink-0" style={{ minWidth: 170, paddingTop: 8 }}>
+          <div style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "0.1em", whiteSpace: "nowrap", marginBottom: 4 }}>
+            {project.status}
+          </div>
           {project.metrics.map((m) => (
             <div key={m.label} style={{ fontSize: 13, color: "rgba(255,255,255,0.5)", fontFamily: "var(--font-mono)", whiteSpace: "nowrap" }}>
               <span style={{ color: project.color, fontWeight: 600 }}>{m.value}</span> {m.label}
@@ -203,14 +205,14 @@ function ProjectCard({
               transition: "color 0.3s",
             }}
           >
-            {isExpanded ? "← Collapse" : "View Details →"}
+            {!hasDetail ? "Coming Soon" : isExpanded ? "← Collapse" : "View Details →"}
           </div>
         </div>
       </div>
 
       {/* ── Expandable detail panel ── */}
       <AnimatePresence initial={false}>
-        {isExpanded && (
+        {isExpanded && project.detail && (
           <motion.div
             key="detail"
             initial={{ height: 0, opacity: 0 }}
@@ -234,9 +236,9 @@ function ProjectCard({
               <div className="grid md:grid-cols-2 gap-10 lg:gap-16">
                 {/* LEFT column */}
                 <div className="flex flex-col gap-8">
-                  <SectionBlock heading="The Problem" body={project.detail.problem} />
-                  <SectionBlock heading="The Architecture" body={project.detail.architecture} />
-                  <SectionBlock heading="Key Innovation" body={project.detail.innovation} />
+                  <SectionBlock heading="The Problem" body={project.detail!.problem} />
+                  <SectionBlock heading="The Architecture" body={project.detail!.architecture} />
+                  <SectionBlock heading="Key Innovation" body={project.detail!.innovation} />
                 </div>
 
                 {/* RIGHT column */}
@@ -266,7 +268,7 @@ function ProjectCard({
                       Tech Stack
                     </div>
                     <div className="flex flex-wrap gap-2">
-                      {project.detail.stack.map((t) => (
+                      {project.detail!.stack.map((t) => (
                         <span
                           key={t}
                           style={{
@@ -285,8 +287,30 @@ function ProjectCard({
                     </div>
                   </div>
 
-                  {/* Collapse button — bottom right */}
-                  <div className="flex justify-end mt-auto pt-2">
+                  {/* Repo link + collapse button — bottom right */}
+                  <div className="flex justify-end gap-3 mt-auto pt-2">
+                    {project.repo && (
+                      <a
+                        href={project.repo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        style={{
+                          fontFamily: "var(--font-mono)",
+                          fontSize: 12,
+                          fontWeight: 600,
+                          color: project.color,
+                          background: "transparent",
+                          border: `1px solid ${project.color}`,
+                          borderRadius: 999,
+                          padding: "8px 18px",
+                          letterSpacing: "0.03em",
+                          textDecoration: "none",
+                        }}
+                      >
+                        GitHub ↗
+                      </a>
+                    )}
                     <button
                       onClick={(e) => { e.stopPropagation(); onToggle(); }}
                       style={{
