@@ -22,10 +22,12 @@ This portfolio is not a template. It's a ground-up, production-grade Next.js app
 
 | Metric | Value |
 |--------|-------|
+| Multi-document retrieval, hybrid vs dense-only (MERIDIAN) | 96.7% vs 90.0% correct-document |
+| Cluster routing, tested and rejected (MERIDIAN) | 1 cluster: nDCG@10 −0.035 (CI below zero) · 3 clusters: −0.005 (CI crosses zero) — shipped off by default |
+| MMR re-ranking, distinct documents in top-10 (MERIDIAN) | 7.0 → 8.2, no ranking cost (95% CI −0.005 to +0.006) |
 | Vectors in production | 10B+ |
-| RAG retrieval accuracy | 86.7% |
-| AI agents built | 5 |
-| Production systems shipped | 3 |
+
+*MERIDIAN eval set: 290 queries · 359 chunks · 204 documents.*
 
 ---
 
