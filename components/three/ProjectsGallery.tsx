@@ -87,7 +87,18 @@ const PROJECTS: Project[] = [
     tagline: "A cross-modal AI system that flags when a company's own earnings-call statements and its SEC filings quietly contradict each other, and checks its stated guidance against what the real financial data actually supports.",
     color: "#2563eb",
     status: "Private · Repo release pending",
-    metrics: [],
+    metrics: [
+      { value: "0.92", label: "F1 Score · from 0.44" },
+      { value: "1.00", label: "Recall · Zero Missed" },
+      { value: "294", label: "Tests · Unit + CI" },
+      { value: "16", label: "Tickers · 150 Pairs Labeled" },
+    ],
+    detail: {
+      problem: "Earnings calls are optimistic by design — executives speaking live, shaping a narrative. The same company's 10-K, filed under legal obligation, is written by a different team in deliberately hedged, cautious language. An analyst is supposed to check whether the two actually agree, but doing that by hand doesn't scale past a handful of companies. And the naive automated fix makes it worse: NLI models reliably fire at ~0.99 contradiction confidence on pairs that share financial vocabulary without any real logical conflict, so \"just flag disagreements\" mostly produces noise. Almost nobody builds the version that measures its own false-positive rate before trusting it.",
+      architecture: "A four-node LangGraph pipeline. Candidate generation runs pgvector ANN search over MiniLM embeddings to find topically-aligned cross-modal pairs. Contradiction detection scores each pair with a cross-encoder NLI model (nli-deberta-v3-base) in both directions, combined into a Weighted Contradiction Score — NLI confidence × source reliability × claim confidence × exp(-λ·|days apart|), with λ=0.01 set empirically against real eval data, not the spec's default. A trend-analyst node forecasts deseasonalized YoY revenue growth with Chronos-T5 against any parsed guidance claim, and flags its own forecast as underdispersed when the model's confidence interval comes back narrower than the input series' actual historical volatility. Filing ingestion (SEC EDGAR/XBRL) and news ingestion (Yahoo Finance RSS, company-name relevance filtered) are both fully automatic — any real ticker, no hardcoded samples.",
+      innovation: "The temporal decay term — meant to discount stale comparisons — was silently making 13 of 16 tested tickers mathematically incapable of ever producing a flagged pair, regardless of what NLI actually decided. A news article compared against a 10-K filed 7–13 months earlier gets its score multiplied toward zero by exp(-0.01×395) before the contradiction threshold is even checked. I'd been reading \"zero pairs\" as \"the model correctly found nothing.\" A frozen scoring snapshot across all 4,880 real candidate pairs showed NLI had fired above 90% confidence on 278 of them — the signal existed, decay just never let it surface. It wasn't that the system found no contradictions. It had been structurally prevented from finding one, for most companies, by arithmetic alone.",
+      stack: ["Python", "FastAPI", "LangGraph", "PostgreSQL/pgvector", "Chronos-T5", "Claude", "scikit-learn"],
+    },
   },
 ];
 
