@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { GraduationCap, Landmark, Bot, Search, Database, Cloud, Cpu, BarChart3 } from "lucide-react";
+import { GraduationCap, Landmark, Bot, Database, Cpu, BarChart3 } from "lucide-react";
 import { ClipReveal, WordReveal, LineDraw } from "./Reveal";
 
 const schools = [
@@ -33,40 +33,32 @@ const schools = [
 
 const certifications = [
   {
-    title: "Generative AI Professional",
-    issuer: "Oracle",
-    color: "#00e5ff",
-    icon: Bot,
-  },
-  {
-    title: "AI Vector Search",
-    issuer: "Oracle",
-    color: "#7040c0",
-    icon: Search,
-  },
-  {
-    title: "Autonomous Database",
+    title: "OCI 2025 Certified Data Science Professional",
     issuer: "Oracle",
     color: "#f0c060",
     icon: Database,
+    url: "https://catalog-education.oracle.com/ords/certview/sharebadge?id=0126302BCDA638530DE3D17D187A73056CF0A5AE6418A3749F894BB0F5D64F75",
   },
   {
-    title: "APEX Cloud Developer",
+    title: "OCI 2025 Certified Generative AI Professional",
     issuer: "Oracle",
-    color: "#00c8a0",
-    icon: Cloud,
+    color: "#00e5ff",
+    icon: Bot,
+    url: "https://catalog-education.oracle.com/pls/certview/sharebadge?id=72855E378E3491FD6233A89FC5431377D5550AE6A3BBF295FF20B02D714E4C8E",
   },
   {
-    title: "Machine Learning",
-    issuer: "IBM",
-    color: "#00e5ff",
+    title: "Machine Learning Introduction for Everyone",
+    issuer: "IBM (via Coursera)",
+    color: "#00c8a0",
     icon: Cpu,
+    url: "https://coursera.org/verify/KBDKDI8QKNF9",
   },
   {
     title: "Business Analytics",
-    issuer: "Harvard Business School",
+    issuer: "Harvard Business School Online · Nov 2021",
     color: "#7040c0",
     icon: BarChart3,
+    url: "https://online.hbs.edu/verify-certificate?dvid=V38HGA4L",
   },
 ];
 
@@ -188,10 +180,13 @@ export default function Education() {
             Certifications &amp; Badges
           </h3>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {certifications.map((cert, i) => (
-              <motion.div
+              <motion.a
                 key={cert.title}
+                href={cert.url}
+                target="_blank"
+                rel="noopener noreferrer"
                 initial={{ opacity: 1, scale: 1, y: 0 }}
                 whileInView={{ opacity: 1, scale: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
@@ -206,7 +201,7 @@ export default function Education() {
                   y: -4,
                   boxShadow: `0 10px 30px ${cert.color}25`,
                 }}
-                className="rounded-xl p-4 text-center"
+                className="block rounded-xl p-4 text-center"
                 style={{
                   background: `${cert.color}10`,
                   border: `1px solid ${cert.color}25`,
@@ -223,7 +218,10 @@ export default function Education() {
                   {cert.title}
                 </div>
                 <div className="text-white/30 text-[10px]">{cert.issuer}</div>
-              </motion.div>
+                <div className="text-[10px] font-semibold mt-2" style={{ color: cert.color }}>
+                  Verify ↗
+                </div>
+              </motion.a>
             ))}
           </div>
         </motion.div>
