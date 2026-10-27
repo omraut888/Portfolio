@@ -32,15 +32,16 @@ const PROJECTS: Project[] = [
     status: "Public · PolyForm Strict license",
     repo: "https://github.com/omraut888/meridian",
     metrics: [
-      { value: "Hybrid", label: "K-means/DBSCAN" },
-      { value: "Dense+Sparse", label: "Retrieval Eval" },
-      { value: "MMR", label: "Re-ranking" },
+      { value: "96.7%", label: "Multi-Doc Recall · from 90.0%" },
+      { value: "8.2 / 10", label: "Distinct Docs@10 · from 7.0" },
+      { value: "55", label: "Tests · Unit + Live Integration" },
+      { value: "359", label: "Chunks · 290 Eval Queries" },
     ],
     detail: {
-      problem: "Naive vector search misses relevant results when queries are ambiguous or results cluster around near-duplicates.",
-      architecture: "Qdrant + Voyage AI embeddings, hierarchical K-means/DBSCAN clustering, MMR re-ranking, FastAPI serving layer, with a generation module for cited, streamed answers.",
-      innovation: "An eval harness (dense-only vs hybrid vs cluster-routing vs MMR) that let the numbers decide the default — cluster routing is built and tested but shipped off by default based on those results.",
-      stack: ["Qdrant", "Voyage AI", "FastAPI", "MMR re-ranking"],
+      problem: "RAG pipelines are usually evaluated end to end — ask a question, read the answer, decide if it looks right. That only measures the net result. If one stage helps and another quietly hurts, the aggregate score still looks fine, and the broken stage never gets found. Most RAG projects never actually learn which of their own design decisions did anything.",
+      architecture: "Qdrant serves dense (Voyage AI) and sparse (BM25) retrieval from a single index, fused via Reciprocal Rank Fusion rather than a weighted score blend, since RRF only needs rank position — not scores on comparable scales, which dense and sparse search don't produce. K-means finds well-separated topic clusters offline; DBSCAN catches the density-based outliers K-means would otherwise force into the wrong group. The fused candidate pool is re-ranked with MMR (λ=0.7) to cut redundancy, then Claude writes a cited, streamed answer served through FastAPI.",
+      innovation: "An ablation harness isolates every stage — dense-only, BM25-only, hybrid, +routing, +MMR — against 290 queries, reporting every delta with a 95% confidence interval, so a 0.01 shift is noise until proven otherwise. That process rejected cluster routing, the stage I was most confident about going in: it cost up to 0.035 nDCG@10. A query-level diagnostic found the actual mechanism — routing only filters the dense branch, so BM25 still finds the correct chunk unfiltered, but a chunk found by only one branch earns half the fused RRF score of one found by both, letting wrong-topic chunks outrank it. The document wasn't lost — it was demoted. Routing ships off by default, fully implemented and still measured on every eval run.",
+      stack: ["Qdrant", "Voyage AI", "FastAPI", "Claude", "K-means/DBSCAN", "MMR Re-ranking"],
     },
   },
   {
