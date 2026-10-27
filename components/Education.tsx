@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { GraduationCap, Landmark, Bot, Search, Database, Cloud, Cpu, BarChart3 } from "lucide-react";
 import { ClipReveal, WordReveal, LineDraw } from "./Reveal";
 
 const schools = [
@@ -13,7 +14,7 @@ const schools = [
     gpa: "3.39",
     color: "#00e5ff",
     accentColor: "#00e5ff",
-    icon: "🎓",
+    icon: GraduationCap,
     gradient: "linear-gradient(135deg, #001820, #0a3d4a)",
   },
   {
@@ -25,7 +26,7 @@ const schools = [
     gpa: "3.33",
     color: "#7040c0",
     accentColor: "#9d7be0",
-    icon: "🏛️",
+    icon: Landmark,
     gradient: "linear-gradient(135deg, #12002b, #3a1e5f)",
   },
 ];
@@ -35,37 +36,37 @@ const certifications = [
     title: "Generative AI Professional",
     issuer: "Oracle",
     color: "#00e5ff",
-    icon: "🤖",
+    icon: Bot,
   },
   {
     title: "AI Vector Search",
     issuer: "Oracle",
     color: "#7040c0",
-    icon: "🔍",
+    icon: Search,
   },
   {
     title: "Autonomous Database",
     issuer: "Oracle",
     color: "#f0c060",
-    icon: "🗄️",
+    icon: Database,
   },
   {
     title: "APEX Cloud Developer",
     issuer: "Oracle",
     color: "#00c8a0",
-    icon: "☁️",
+    icon: Cloud,
   },
   {
     title: "Machine Learning",
     issuer: "IBM",
     color: "#00e5ff",
-    icon: "⚙️",
+    icon: Cpu,
   },
   {
     title: "Business Analytics",
     issuer: "Harvard Business School",
     color: "#7040c0",
-    icon: "📊",
+    icon: BarChart3,
   },
 ];
 
@@ -132,7 +133,7 @@ export default function Education() {
                       border: `1px solid ${school.color}30`,
                     }}
                   >
-                    {school.icon}
+                    <school.icon size={24} color={school.accentColor} />
                   </div>
                   <div>
                     <h3 className="font-bold text-white text-xl leading-tight">
@@ -212,7 +213,9 @@ export default function Education() {
                   backdropFilter: "blur(10px)",
                 }}
               >
-                <div className="text-2xl mb-2">{cert.icon}</div>
+                <div className="h-8 mb-2 flex items-center justify-center">
+                  <cert.icon size={24} color={cert.color} />
+                </div>
                 <div
                   className="font-bold text-xs leading-tight mb-1"
                   style={{ color: cert.color }}
