@@ -68,7 +68,7 @@ const PROJECTS: Project[] = [
     id: "invariant",
     title: "INVARIANT",
     tagline: "Autonomous quant research pipeline — causal signal discovery to portfolio construction",
-    color: "#f0c060",
+    color: "#c9a54e",
     status: "Planned — next build",
     metrics: [
       { value: "Decay", label: "Validation" },

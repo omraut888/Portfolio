@@ -73,7 +73,7 @@ export default function Skills() {
             CAPABILITIES
           </p>
           <h2 className="section-heading text-white">Skills &amp; Technologies</h2>
-          <LineDraw className="mx-auto mt-8" style={{ maxWidth: 200 }} color="rgba(255,255,255,0.1)" />
+          <LineDraw className="mx-auto mt-8" style={{ maxWidth: 120 }} color="rgba(201,165,78,0.55)" />
         </ClipReveal>
 
         {/* Two-column masonry index */}

@@ -132,13 +132,13 @@ export default function About() {
             <WordReveal
               text="I build systems that think."
               style={{
-                fontFamily: "var(--font-display)",
-                fontStyle: "italic",
-                fontSize: "clamp(36px, 5vw, 64px)",
+                fontFamily: "var(--font-headline)",
+                fontSize: "clamp(48px, 8vw, 120px)",
                 fontWeight: 400,
-                lineHeight: 1.15,
+                lineHeight: 1.02,
                 color: "#ffffff",
-                letterSpacing: "-0.01em",
+                letterSpacing: "0.005em",
+                textTransform: "uppercase",
               }}
             />
           </div>
@@ -163,11 +163,12 @@ export default function About() {
               </p>
               <h2
                 style={{
-                  fontFamily: "var(--font-display)",
+                  fontFamily: "var(--font-headline)",
                   fontSize: "clamp(30px, 3.5vw, 44px)",
                   fontWeight: 400,
-                  lineHeight: 1.1,
-                  letterSpacing: "-0.01em",
+                  lineHeight: 1.05,
+                  letterSpacing: "0.01em",
+                  textTransform: "uppercase",
                   color: "#ffffff",
                 }}
               >

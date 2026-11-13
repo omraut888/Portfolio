@@ -7,7 +7,7 @@ import { ClipReveal } from "./Reveal";
 const STATS = [
   { target: 10, suffix: "B+", label: "Vectors in Production", color: "#00e5ff", decimals: 0 },
   { target: 86.7, suffix: "%", label: "RAG Accuracy", color: "#7040c0", decimals: 1 },
-  { target: 5, suffix: "", label: "AI Agents Built", color: "#f0c060", decimals: 0 },
+  { target: 5, suffix: "", label: "AI Agents Built", color: "#c9a54e", decimals: 0 },
   { target: 3, suffix: "", label: "Production Systems", color: "#2563eb", decimals: 0 },
 ];
 
@@ -50,11 +50,11 @@ function StatItem({ stat, index }: { stat: (typeof STATS)[0]; index: number }) {
     >
       <div
         style={{
-          fontFamily: "var(--font-display)",
+          fontFamily: "var(--font-headline)",
           fontSize: "clamp(60px, 8vw, 100px)",
-          fontWeight: 300,
+          fontWeight: 400,
           lineHeight: 1,
-          letterSpacing: "-0.02em",
+          letterSpacing: "0.01em",
           color: hover ? stat.color : "#ffffff",
           textShadow: hover ? `0 0 40px ${stat.color}80` : "none",
           transition: "color 0.4s, text-shadow 0.4s",

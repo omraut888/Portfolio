@@ -14,11 +14,13 @@ const config: Config = {
         "electric-blue": "#00e5ff",
         "midnight-navy": "#060318",
         "deep-purple": "#7040c0",
+        gold: "#c9a54e",
       },
       fontFamily: {
         sans: ["var(--font-body)", "system-ui", "sans-serif"],
         mono: ["var(--font-mono)", "monospace"],
         display: ["var(--font-display)", "Georgia", "serif"],
+        headline: ["var(--font-headline)", "Inter", "sans-serif"],
       },
       animation: {
         "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",

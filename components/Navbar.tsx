@@ -71,7 +71,7 @@ export default function Navbar() {
           <span
             className="text-xl font-black tracking-tighter"
             style={{
-              background: "linear-gradient(135deg, #c8d0e0, #f0c060, #00e5ff)",
+              background: "linear-gradient(135deg, #c8d0e0, #c9a54e, #00e5ff)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
@@ -90,7 +90,7 @@ export default function Navbar() {
               className={`relative px-4 py-2 text-sm font-medium rounded-full transition-colors duration-200 ${
                 activeSection === id
                   ? "text-white"
-                  : "text-white/50 hover:text-white/80"
+                  : "text-white/50 hover:text-gold"
               }`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -107,7 +107,9 @@ export default function Navbar() {
                   transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 />
               )}
-              <span className="relative z-10">{labels[i]}</span>
+              <span className={`relative z-10 ${activeSection === id ? "" : "link-gold"}`}>
+                {labels[i]}
+              </span>
             </motion.button>
           ))}
         </div>

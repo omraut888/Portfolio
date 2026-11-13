@@ -281,7 +281,7 @@ function ContactLink({ link }: { link: (typeof links)[0] }) {
       {/* Text */}
       <div className="flex-1 min-w-0">
         <div className="text-white/40 text-xs mb-0.5">{link.label}</div>
-        <div className="text-white font-medium text-sm truncate">{link.value}</div>
+        <div className="text-white font-medium text-sm truncate transition-colors duration-300 group-hover:text-gold">{link.value}</div>
       </div>
 
       {/* Copy indicator */}
@@ -306,7 +306,7 @@ function ContactLink({ link }: { link: (typeof links)[0] }) {
       {/* Arrow / copy glyph */}
       {!link.copyable ? (
         <svg
-          className="w-4 h-4 text-white/20 group-hover:text-white/60 transition-colors flex-shrink-0"
+          className="w-4 h-4 text-white/20 group-hover:text-gold transition-colors flex-shrink-0"
           fill="none"
           viewBox="0 0 24 24"
         >
@@ -320,7 +320,7 @@ function ContactLink({ link }: { link: (typeof links)[0] }) {
         </svg>
       ) : (
         <svg
-          className="w-4 h-4 text-white/20 group-hover:text-white/60 transition-colors flex-shrink-0"
+          className="w-4 h-4 text-white/20 group-hover:text-gold transition-colors flex-shrink-0"
           fill="none"
           viewBox="0 0 24 24"
         >
@@ -383,11 +383,12 @@ export default function Contact() {
               </span>
               <h2
                 style={{
-                  fontFamily: "var(--font-display)",
+                  fontFamily: "var(--font-headline)",
                   fontSize: "clamp(36px, 4vw, 52px)",
-                  fontWeight: 300,
-                  lineHeight: 1,
-                  letterSpacing: "-0.02em",
+                  fontWeight: 400,
+                  lineHeight: 1.02,
+                  letterSpacing: "0.01em",
+                  textTransform: "uppercase",
                   color: "#ffffff",
                 }}
               >

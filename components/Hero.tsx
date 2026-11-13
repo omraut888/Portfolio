@@ -112,11 +112,12 @@ export default function Hero() {
               }}
               className="inline-block"
               style={{
-                fontFamily: "var(--font-display)",
-                fontSize: "clamp(72px, 12vw, 140px)",
-                fontWeight: 300,
-                letterSpacing: "-0.03em",
-                lineHeight: 1,
+                fontFamily: "var(--font-headline)",
+                fontSize: "clamp(48px, 8vw, 120px)",
+                fontWeight: 400,
+                letterSpacing: "0.01em",
+                lineHeight: 1.02,
+                textTransform: "uppercase",
                 color: char === " " ? "transparent" : "#ffffff",
                 textShadow: char === " " ? undefined : "0 0 60px rgba(0,0,0,0.8)",
                 width: char === " " ? "0.25em" : undefined,

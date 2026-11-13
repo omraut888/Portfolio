@@ -51,7 +51,7 @@ const experiences: ExperienceItem[] = [
     role: "Data Analyst",
     date: "Jan 2024 – Mar 2024",
     location: "Mumbai, India",
-    color: "#f0c060",
+    color: "#c9a54e",
     badge: "Analyst",
     bullets: [
       "Built time-series and regression models to forecast demand — reduced stockouts by 15%",
@@ -239,7 +239,7 @@ export default function Experience() {
             Work History
           </p>
           <h2 className="section-heading text-white">Work Experience</h2>
-          <LineDraw className="mx-auto mt-8" style={{ maxWidth: 200 }} color="rgba(255,255,255,0.1)" />
+          <LineDraw className="mx-auto mt-8" style={{ maxWidth: 120 }} color="rgba(201,165,78,0.55)" />
         </ClipReveal>
 
         {/* Timeline */}
@@ -251,7 +251,7 @@ export default function Experience() {
               className="absolute top-0 left-0 w-full"
               style={{
                 height: lineHeight,
-                background: "linear-gradient(180deg, #7040c0, #00e5ff, #f0c060)",
+                background: "linear-gradient(180deg, #7040c0, #00e5ff, #c9a54e)",
               }}
             />
           </div>

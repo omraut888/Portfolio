@@ -21,7 +21,7 @@ export default function ScrollProgress() {
         className="h-full origin-left"
         style={{
           width: `${progress}%`,
-          background: "linear-gradient(90deg, #7040c0, #00e5ff, #f0c060)",
+          background: "linear-gradient(90deg, #7040c0, #00e5ff, #c9a54e)",
           boxShadow: "0 0 8px rgba(0,229,255,0.6)",
           transition: "width 0.05s linear",
         }}

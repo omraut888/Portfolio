@@ -13,6 +13,7 @@ import Experience from "@/components/Experience";
 import Projects from "@/components/Projects";
 import Education from "@/components/Education";
 import Contact from "@/components/Contact";
+import { SectionReveal } from "@/components/Reveal";
 
 const CustomCursor = dynamic(() => import("@/components/CustomCursor"), {
   ssr: false,
@@ -29,13 +30,27 @@ export default function Home() {
 
       <main className="relative z-10">
         <Hero />
-        <Stats />
-        <About />
-        <Skills />
-        <Experience />
-        <Projects />
-        <Education />
-        <Contact />
+        <SectionReveal>
+          <Stats />
+        </SectionReveal>
+        <SectionReveal>
+          <About />
+        </SectionReveal>
+        <SectionReveal>
+          <Skills />
+        </SectionReveal>
+        <SectionReveal>
+          <Experience />
+        </SectionReveal>
+        <SectionReveal>
+          <Projects />
+        </SectionReveal>
+        <SectionReveal>
+          <Education />
+        </SectionReveal>
+        <SectionReveal>
+          <Contact />
+        </SectionReveal>
       </main>
     </>
   );

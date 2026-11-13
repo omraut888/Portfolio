@@ -35,7 +35,7 @@ const certifications = [
   {
     title: "OCI 2025 Certified Data Science Professional",
     issuer: "Oracle",
-    color: "#f0c060",
+    color: "#c9a54e",
     icon: Database,
     url: "https://catalog-education.oracle.com/ords/certview/sharebadge?id=0126302BCDA638530DE3D17D187A73056CF0A5AE6418A3749F894BB0F5D64F75",
   },
@@ -88,7 +88,7 @@ export default function Education() {
           <h2 className="section-heading text-white">
             <WordReveal text="Education" />
           </h2>
-          <LineDraw className="mx-auto mt-8" style={{ maxWidth: 200 }} color="rgba(255,255,255,0.1)" />
+          <LineDraw className="mx-auto mt-8" style={{ maxWidth: 120 }} color="rgba(201,165,78,0.55)" />
         </ClipReveal>
 
         {/* School cards */}
@@ -219,7 +219,7 @@ export default function Education() {
                 </div>
                 <div className="text-white/30 text-[10px]">{cert.issuer}</div>
                 <div className="text-[10px] font-semibold mt-2" style={{ color: cert.color }}>
-                  Verify ↗
+                  <span className="link-gold">Verify ↗</span>
                 </div>
               </motion.a>
             ))}

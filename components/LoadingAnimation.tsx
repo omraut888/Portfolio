@@ -46,7 +46,7 @@ export default function LoadingAnimation() {
                 fontWeight: 300,
                 letterSpacing: "-0.04em",
                 lineHeight: 1,
-                background: "linear-gradient(135deg, #c8d0e0, #00e5ff, #f0c060)",
+                background: "linear-gradient(135deg, #c8d0e0, #00e5ff, #c9a54e)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -75,7 +75,7 @@ export default function LoadingAnimation() {
               <motion.div
                 className="h-full rounded-full"
                 style={{
-                  background: "linear-gradient(90deg, #7040c0, #00e5ff, #f0c060)",
+                  background: "linear-gradient(90deg, #7040c0, #00e5ff, #c9a54e)",
                 }}
                 initial={{ width: "0%" }}
                 animate={{ width: "100%" }}

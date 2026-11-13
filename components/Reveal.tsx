@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, MotionConfig } from "framer-motion";
 import type { CSSProperties, ReactNode } from "react";
 
 const CURTAIN = [0.76, 0, 0.24, 1] as [number, number, number, number];
@@ -99,5 +99,25 @@ export function LineDraw({
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.8, ease: "easeOut", delay }}
     />
+  );
+}
+
+/**
+ * Section-level scroll reveal: fade + 20px slide-up the first time the section
+ * enters the viewport. Fires once. With prefers-reduced-motion the slide is
+ * dropped and only the fade remains.
+ */
+export function SectionReveal({ children }: { children: ReactNode }) {
+  return (
+    <MotionConfig reducedMotion="user">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.05 }}
+        transition={{ duration: 0.8, ease: RISE }}
+      >
+        {children}
+      </motion.div>
+    </MotionConfig>
   );
 }
