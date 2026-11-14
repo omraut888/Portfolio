@@ -85,7 +85,7 @@ export default function Navbar() {
               className={`relative px-4 py-2 text-sm font-medium rounded-full transition-colors duration-200 ${
                 activeSection === id
                   ? "text-white"
-                  : "text-white/50 hover:text-gold-metal"
+                  : "text-white/50 hover:text-accent"
               }`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -101,7 +101,7 @@ export default function Navbar() {
                   transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 />
               )}
-              <span className={`relative z-10 ${activeSection === id ? "" : "link-gold"}`}>
+              <span className={`relative z-10 ${activeSection === id ? "" : "link-accent"}`}>
                 {labels[i]}
               </span>
             </motion.button>
@@ -113,16 +113,16 @@ export default function Navbar() {
           onClick={() => scrollTo("contact")}
           className="hidden md:flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold"
           style={{
-            background: "rgba(184,144,62,0)",
-            border: "1px solid #B8903E",
+            background: "rgba(232,48,58,0)",
+            border: "1px solid #E8303A",
           }}
           whileHover={{
             scale: 1.05,
-            backgroundColor: "rgba(184,144,62,0.12)",
+            backgroundColor: "rgba(232,48,58,0.12)",
           }}
           whileTap={{ scale: 0.95 }}
         >
-          <span className="text-gold-metal">Hire Me</span>
+          <span className="text-accent">Hire Me</span>
         </motion.button>
 
         {/* Mobile hamburger */}
@@ -166,7 +166,7 @@ export default function Navbar() {
               key={id}
               onClick={() => scrollTo(id)}
               className={`text-left py-2 text-base font-medium transition-colors ${
-                activeSection === id ? "text-gold-metal" : "text-white/60"
+                activeSection === id ? "text-accent" : "text-white/60"
               }`}
             >
               {labels[i]}

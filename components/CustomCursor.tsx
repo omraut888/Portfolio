@@ -97,7 +97,7 @@ export default function CustomCursor() {
           width: isClicking ? 28 : isHovering ? 40 : 32,
           height: isClicking ? 28 : isHovering ? 40 : 32,
           borderRadius: "50%",
-          border: `1.5px solid ${isHovering ? "rgba(184,144,62,0.85)" : "rgba(255,255,255,0.35)"}`,
+          border: `1.5px solid ${isHovering ? "rgba(232,48,58,0.85)" : "rgba(255,255,255,0.35)"}`,
           transform: "translate(-50%, -50%)",
           transition:
             "width 0.3s cubic-bezier(0.23,1,0.32,1), height 0.3s cubic-bezier(0.23,1,0.32,1), border-color 0.3s",

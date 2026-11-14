@@ -62,11 +62,13 @@ export default function Hero() {
   const nameLetters = "Om Raut".split("");
 
   // Name grows and dissolves as the hero scrolls away (scrubbed to scroll).
+  // The name leaves the viewport after roughly the first third of the hero's
+  // scroll, so both effects complete within the first half to stay on-screen.
   const heroRef = useRef<HTMLElement>(null);
   const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
-  const nameScale = useTransform(scrollYProgress, [0, 1], [1, reduceMotion ? 1 : 1.15]);
-  const nameOpacity = useTransform(scrollYProgress, scrubOpacity([0, 0.85], [1, 0]));
+  const nameScale = useTransform(scrollYProgress, [0, 0.5], [1, reduceMotion ? 1 : 1.35]);
+  const nameOpacity = useTransform(scrollYProgress, scrubOpacity([0, 0.45], [1, 0]));
 
   return (
     <section
@@ -120,7 +122,7 @@ export default function Hero() {
         {/* Typewriter — massive hollow / outline text */}
         <motion.div variants={fadeUp} className="flex items-center justify-center mt-4 mb-8">
           <div
-            className="text-gold-metal"
+            className="text-accent"
             style={{
               fontFamily: "var(--font-body)",
               fontSize: "clamp(20px, 2.4vw, 30px)",
@@ -136,7 +138,7 @@ export default function Hero() {
               style={{
                 width: 3,
                 height: "0.9em",
-                background: "var(--gold)",
+                background: "var(--accent)",
                 verticalAlign: "middle",
               }}
             />
@@ -146,8 +148,8 @@ export default function Hero() {
         {/* Available — subtle status dot */}
         <motion.div variants={fadeUp} className="flex items-center justify-center gap-2.5 mb-8">
           <span className="relative flex h-2.5 w-2.5">
-            <span className="absolute inline-flex h-full w-full rounded-full bg-gold opacity-60 animate-ping" />
-            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-gold" />
+            <span className="absolute inline-flex h-full w-full rounded-full bg-accent opacity-60 animate-ping" />
+            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-accent" />
           </span>
           <span className="text-white/55 text-sm font-mono tracking-wide">Available</span>
         </motion.div>
@@ -179,14 +181,14 @@ export default function Hero() {
             className="relative overflow-hidden px-8 py-3.5 rounded-full font-semibold text-sm"
             style={{
               background: "transparent",
-              border: "1px solid var(--gold)",
+              border: "1px solid var(--accent)",
               transition: "background 0.3s",
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.background = "rgba(184,144,62,0.12)";
+              (e.currentTarget as HTMLButtonElement).style.background = "rgba(232,48,58,0.12)";
             }}
           >
-            <span className="text-gold-metal">View My Work</span>
+            <span className="text-accent">View My Work</span>
           </button>
 
           <button
@@ -213,7 +215,7 @@ export default function Hero() {
             }}
             onMouseEnter={(e) => {
               (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.08)";
-              (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(184,144,62,0.5)";
+              (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(232,48,58,0.5)";
             }}
           >
             Contact Me
@@ -230,7 +232,7 @@ export default function Hero() {
               className="absolute top-0 left-0 w-full"
               style={{
                 height: "50%",
-                background: "linear-gradient(180deg, var(--gold), transparent)",
+                background: "linear-gradient(180deg, var(--accent), transparent)",
               }}
               animate={{ y: ["0%", "200%"] }}
               transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}

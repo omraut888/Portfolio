@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { ClipReveal, CountUp } from "./Reveal";
 
 const STATS = [
@@ -11,18 +10,15 @@ const STATS = [
 ];
 
 function StatItem({ stat, index }: { stat: (typeof STATS)[0]; index: number }) {
-  const [hover, setHover] = useState(false);
   return (
     <div
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
       className="flex flex-col items-center justify-center text-center px-6 py-6"
       style={{
         borderLeft: index === 0 ? "none" : "1px solid rgba(26,24,22,0.12)",
       }}
     >
       <div
-        className={hover ? "text-gold-metal" : undefined}
+        className="text-accent"
         style={{
           fontFamily: "var(--font-headline)",
           fontSize: "clamp(60px, 8vw, 100px)",

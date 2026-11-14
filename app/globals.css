@@ -21,13 +21,8 @@
 :root {
   --background: #030308;
   --foreground: #ffffff;
-  /* Gold accent, used sparingly.
-     --gold: flat, deepened/warmed — for borders, underlines and solid fills.
-     --gold-text: metallic gradient for gold TEXT (via .text-gold-metal);
-     --gold-text-fallback: solid colour where gradient text can't render (SVG icons, old browsers). */
-  --gold: #B8903E;
-  --gold-text: linear-gradient(135deg, #F4E5B8 0%, #C9A227 45%, #8A6A1E 100%);
-  --gold-text-fallback: #C9A227;
+  /* Single site accent — vivid crimson, used sparingly (text, borders, fills). */
+  --accent: #E8303A;
   /* Light (cream) sections */
   --cream: #F5F0E6;
   --ink: #1A1816;
@@ -81,7 +76,7 @@ body {
   background: #030308;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(184, 144, 62, 0.6);
+  background: rgba(232, 48, 58, 0.6);
   border-radius: 2px;
 }
 
@@ -117,66 +112,35 @@ body {
     text-transform: uppercase;
   }
 
-  /* Small gold underline that draws in on hover */
-  .link-gold {
+  /* Small accent underline that draws in on hover */
+  .link-accent {
     position: relative;
     transition: color 0.25s var(--ease);
   }
-  .link-gold::after {
+  .link-accent::after {
     content: "";
     position: absolute;
     left: 0;
     right: 0;
     bottom: -2px;
     height: 1px;
-    background: var(--gold);
+    background: var(--accent);
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.35s var(--ease);
   }
-  .link-gold:hover {
-    color: var(--gold-text-fallback);
+  .link-accent:hover {
+    color: var(--accent);
   }
-  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
-    .link-gold:hover {
-      background-image: var(--gold-text);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-  }
-  .link-gold:hover::after {
+  .link-accent:hover::after {
     transform: scaleX(1);
   }
 }
 
-/* Metallic gold text. Put it on an element whose own inline style does not set
-   `background` (the shorthand would wipe the gradient and leave text transparent). */
-@layer utilities {
-  .text-gold-metal {
-    color: var(--gold-text-fallback);
-  }
-  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
-    .text-gold-metal {
-      background-image: var(--gold-text);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-  }
-  /* Solid gold for SVG icons (gradient text doesn't apply to strokes) */
-  .text-gold-icon {
-    color: var(--gold-text-fallback);
-  }
-}
-
-/* Light (cream) section surface: ink text, and a deeper gold gradient so gold
-   text keeps contrast on the pale background. */
+/* Light (cream) section surface: ink text */
 .surface-light {
   background: var(--cream);
   color: var(--ink);
-  --gold-text: linear-gradient(135deg, #B8903E 0%, #8A6A1E 100%);
-  --gold-text-fallback: #8A6A1E;
 }
 
 /* Shimmer keyframe */
@@ -210,7 +174,7 @@ body {
 .ripple {
   position: absolute;
   border-radius: 50%;
-  background: rgba(184, 144, 62, 0.3);
+  background: rgba(232, 48, 58, 0.3);
   animation: ripple 0.6s linear;
   pointer-events: none;
 }
@@ -272,8 +236,8 @@ section {
   top: -6%;
   opacity: 0;
   pointer-events: none;
-  background: linear-gradient(90deg, transparent, #B8903E, transparent);
-  box-shadow: 0 0 14px 2px rgba(184, 144, 62, 0.4);
+  background: linear-gradient(90deg, transparent, #E8303A, transparent);
+  box-shadow: 0 0 14px 2px rgba(232, 48, 58, 0.4);
   z-index: 5;
 }
 

@@ -11,7 +11,7 @@ const config: Config = {
       colors: {
         background: "#030308",
         foreground: "#ffffff",
-        gold: "#B8903E",
+        accent: "#E8303A",
         ink: "#1A1816",
         cream: "#F5F0E6",
       },

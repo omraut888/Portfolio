@@ -121,7 +121,7 @@ export const scrubOpacity = (input: number[], output: number[]) => (v: number) =
   transform(v, input, output);
 
 /**
- * Scroll-scrubbed headline: scales 0.85 → 1 and fades 0 → 1 as the block's top
+ * Scroll-scrubbed headline: scales 0.7 → 1 and fades 0 → 1 as the block's top
  * travels from 80% to 30% of the viewport. Tied to scroll position, so it
  * reverses when scrolling back up. Reduced motion: opacity only.
  */
@@ -138,7 +138,7 @@ export function ScrollScale({
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.8", "start 0.3"] });
   const opacity = useTransform(scrollYProgress, scrubOpacity([0, 1], [0, 1]));
-  const scale = useTransform(scrollYProgress, [0, 1], [reduce ? 1 : 0.85, 1]);
+  const scale = useTransform(scrollYProgress, [0, 1], [reduce ? 1 : 0.7, 1]);
   return (
     <motion.div ref={ref} className={className} style={{ ...style, opacity, scale }}>
       {children}
@@ -147,7 +147,7 @@ export function ScrollScale({
 }
 
 /**
- * Scroll-scrubbed list item (project rows, experience cards): slides in 40px
+ * Scroll-scrubbed list item (project rows, experience cards): slides in 120px
  * from the left (odd rows) or right (even rows) while scaling 0.85 → 1 and
  * fading in. Uses a slightly earlier window than headlines so a card is fully
  * settled before it reaches mid-screen. Reduced motion: opacity only.
@@ -167,7 +167,7 @@ export function ScrollSlide({
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.95", "start 0.55"] });
-  const from = index % 2 === 0 ? -40 : 40;
+  const from = index % 2 === 0 ? -120 : 120;
   const opacity = useTransform(scrollYProgress, scrubOpacity([0, 1], [0, 1]));
   const scale = useTransform(scrollYProgress, [0, 1], [reduce ? 1 : 0.85, 1]);
   const x = useTransform(scrollYProgress, [0, 1], [reduce ? 0 : from, 0]);

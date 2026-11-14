@@ -148,7 +148,7 @@ function ContactTerminal() {
             transition={{ duration: 0.25 }}
           >
             <div>
-              <span className="text-gold-metal">$ </span>
+              <span className="text-accent">$ </span>
               <span style={{ color: "rgba(255,255,255,0.85)" }}>{line.cmd}</span>
             </div>
             <div style={{ color: "rgba(255,255,255,0.6)", paddingLeft: "1em", marginTop: 2 }}>
@@ -158,10 +158,10 @@ function ContactTerminal() {
         ))}
         {visibleLines < TERMINAL_LINES.length && (
           <div>
-            <span className="text-gold-metal">$ </span>
+            <span className="text-accent">$ </span>
             <span
               className="inline-block w-1.5 h-3.5 align-middle animate-[cursorBlink_1s_step-end_infinite]"
-              style={{ background: "var(--gold)" }}
+              style={{ background: "var(--accent)" }}
             />
           </div>
         )}
@@ -204,7 +204,7 @@ function ContactLink({ link }: { link: (typeof links)[0] }) {
       }}
       whileHover={{
         scale: 1.02,
-        borderColor: "rgba(184,144,62,0.35)",
+        borderColor: "rgba(232,48,58,0.35)",
       }}
     >
       {/* Icon */}
@@ -222,7 +222,7 @@ function ContactLink({ link }: { link: (typeof links)[0] }) {
       {/* Text */}
       <div className="flex-1 min-w-0">
         <div className="text-white/40 text-xs mb-0.5">{link.label}</div>
-        <div className="text-white font-medium text-sm truncate transition-colors duration-300 group-hover:text-gold-metal">{link.value}</div>
+        <div className="text-white font-medium text-sm truncate transition-colors duration-300 group-hover:text-accent">{link.value}</div>
       </div>
 
       {/* Copy indicator */}
@@ -234,11 +234,11 @@ function ContactLink({ link }: { link: (typeof links)[0] }) {
             exit={{ scale: 0, opacity: 0 }}
             className="px-3 py-1 rounded-full text-xs font-semibold"
             style={{
-              background: "rgba(184,144,62,0.1)",
-              border: "1px solid rgba(184,144,62,0.3)",
+              background: "rgba(232,48,58,0.1)",
+              border: "1px solid rgba(232,48,58,0.3)",
             }}
           >
-            <span className="text-gold-metal">Copied!</span>
+            <span className="text-accent">Copied!</span>
           </motion.div>
         )}
       </AnimatePresence>
@@ -246,7 +246,7 @@ function ContactLink({ link }: { link: (typeof links)[0] }) {
       {/* Arrow / copy glyph */}
       {!link.copyable ? (
         <svg
-          className="w-4 h-4 text-white/20 group-hover:text-gold-icon transition-colors flex-shrink-0"
+          className="w-4 h-4 text-white/20 group-hover:text-accent transition-colors flex-shrink-0"
           fill="none"
           viewBox="0 0 24 24"
         >
@@ -260,7 +260,7 @@ function ContactLink({ link }: { link: (typeof links)[0] }) {
         </svg>
       ) : (
         <svg
-          className="w-4 h-4 text-white/20 group-hover:text-gold-icon transition-colors flex-shrink-0"
+          className="w-4 h-4 text-white/20 group-hover:text-accent transition-colors flex-shrink-0"
           fill="none"
           viewBox="0 0 24 24"
         >
@@ -292,7 +292,7 @@ export default function Contact() {
           transition={{ duration: 0.6 }}
           className="text-base font-semibold tracking-widest uppercase mb-10 text-center"
         >
-          <span className="text-gold-metal">Get In Touch</span>
+          <span className="text-accent">Get In Touch</span>
         </motion.p>
 
         <div className="grid lg:grid-cols-[3fr_2fr] gap-8 items-stretch">
@@ -306,8 +306,8 @@ export default function Contact() {
             {/* Heading with pulsing status dot */}
             <ScrollScale className="flex items-center gap-3 mb-3" style={{ transformOrigin: "left center" }}>
               <span className="relative flex h-3 w-3 flex-shrink-0">
-                <span className="absolute inline-flex h-full w-full rounded-full bg-gold opacity-60 animate-ping" />
-                <span className="relative inline-flex h-3 w-3 rounded-full bg-gold" />
+                <span className="absolute inline-flex h-full w-full rounded-full bg-accent opacity-60 animate-ping" />
+                <span className="relative inline-flex h-3 w-3 rounded-full bg-accent" />
               </span>
               <h2
                 style={{
@@ -356,7 +356,7 @@ export default function Contact() {
                 border: "1px solid rgba(255,255,255,0.12)",
               }}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
               <span className="text-white/75 text-xs font-mono tracking-wide">
                 Available Dec 2026 · F-1 OPT
               </span>

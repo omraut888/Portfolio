@@ -72,7 +72,7 @@ export default function LoadingAnimation() {
               <motion.div
                 className="h-full rounded-full"
                 style={{
-                  background: "#B8903E",
+                  background: "#E8303A",
                 }}
                 initial={{ width: "0%" }}
                 animate={{ width: "100%" }}

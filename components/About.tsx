@@ -2,7 +2,8 @@
 
 import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { motion, useScroll, useTransform, useInView, useReducedMotion } from "framer-motion";
+import type { MotionValue } from "framer-motion";
 import { WordReveal, LineDraw, ScrollScale } from "./Reveal";
 
 const TERMINAL_LINES = [
@@ -51,17 +52,17 @@ function Terminal() {
       <div className="p-3 space-y-1.5 text-xs">
         {TERMINAL_LINES.slice(0, visibleLines).map((line, i) => (
           <div key={i}>
-            <span className="text-gold-metal">$ </span>
+            <span className="text-accent">$ </span>
             <span style={{ color: "rgba(255,255,255,0.85)" }}>{line.cmd}</span>
             <div style={{ color: "rgba(255,255,255,0.55)", paddingLeft: "1em" }}>{line.out}</div>
           </div>
         ))}
         {visibleLines < TERMINAL_LINES.length && (
           <div>
-            <span className="text-gold-metal">$ </span>
+            <span className="text-accent">$ </span>
             <span
               className="inline-block w-1.5 h-3 align-middle animate-[cursorBlink_1s_step-end_infinite]"
-              style={{ background: "var(--gold)" }}
+              style={{ background: "var(--accent)" }}
             />
           </div>
         )}
@@ -70,11 +71,11 @@ function Terminal() {
   );
 }
 
-function PortraitCard() {
+function PortraitCard({ filter }: { filter: MotionValue<string> }) {
   return (
-    <div
+    <motion.div
       className="group relative rounded-2xl overflow-hidden"
-      style={{ width: 300, height: 440, boxShadow: "0 28px 70px rgba(26,24,22,0.28)" }}
+      style={{ width: 300, height: 440, boxShadow: "0 28px 70px rgba(26,24,22,0.28)", filter }}
     >
       <Image src="/profile.jpg" alt="Om Raut" fill className="object-cover xray-photo" />
       <div className="xray-line" />
@@ -83,20 +84,24 @@ function PortraitCard() {
       <div className="absolute inset-y-0 left-0 pointer-events-none" style={{ width: "15%", background: "linear-gradient(to right, rgba(0,0,0,0.4), transparent)" }} />
       <div className="absolute inset-y-0 right-0 pointer-events-none" style={{ width: "15%", background: "linear-gradient(to left, rgba(0,0,0,0.4), transparent)" }} />
       <svg className="absolute top-3 left-3 z-10" width="18" height="18" viewBox="0 0 18 18" fill="none">
-        <path d="M0 14 L0 0 L14 0" stroke="white" strokeWidth="1.5" strokeOpacity="0.45" className="transition-[stroke,stroke-opacity] duration-500 group-hover:stroke-[#B8903E] group-hover:[stroke-opacity:0.95]" />
+        <path d="M0 14 L0 0 L14 0" stroke="white" strokeWidth="1.5" strokeOpacity="0.45" className="transition-[stroke,stroke-opacity] duration-500 group-hover:stroke-[#E8303A] group-hover:[stroke-opacity:0.95]" />
       </svg>
       <svg className="absolute top-3 right-3 z-10" width="18" height="18" viewBox="0 0 18 18" fill="none">
-        <path d="M18 14 L18 0 L4 0" stroke="white" strokeWidth="1.5" strokeOpacity="0.45" className="transition-[stroke,stroke-opacity] duration-500 group-hover:stroke-[#B8903E] group-hover:[stroke-opacity:0.95]" />
+        <path d="M18 14 L18 0 L4 0" stroke="white" strokeWidth="1.5" strokeOpacity="0.45" className="transition-[stroke,stroke-opacity] duration-500 group-hover:stroke-[#E8303A] group-hover:[stroke-opacity:0.95]" />
       </svg>
       <svg className="absolute bottom-3 left-3 z-10" width="18" height="18" viewBox="0 0 18 18" fill="none">
-        <path d="M0 4 L0 18 L14 18" stroke="white" strokeWidth="1.5" strokeOpacity="0.45" className="transition-[stroke,stroke-opacity] duration-500 group-hover:stroke-[#B8903E] group-hover:[stroke-opacity:0.95]" />
+        <path d="M0 4 L0 18 L14 18" stroke="white" strokeWidth="1.5" strokeOpacity="0.45" className="transition-[stroke,stroke-opacity] duration-500 group-hover:stroke-[#E8303A] group-hover:[stroke-opacity:0.95]" />
       </svg>
       <svg className="absolute bottom-3 right-3 z-10" width="18" height="18" viewBox="0 0 18 18" fill="none">
-        <path d="M18 4 L18 18 L4 18" stroke="white" strokeWidth="1.5" strokeOpacity="0.45" className="transition-[stroke,stroke-opacity] duration-500 group-hover:stroke-[#B8903E] group-hover:[stroke-opacity:0.95]" />
+        <path d="M18 4 L18 18 L4 18" stroke="white" strokeWidth="1.5" strokeOpacity="0.45" className="transition-[stroke,stroke-opacity] duration-500 group-hover:stroke-[#E8303A] group-hover:[stroke-opacity:0.95]" />
       </svg>
-    </div>
+    </motion.div>
   );
 }
+
+// Section scroll progress where the portrait starts / finishes regaining colour.
+const PHOTO_GRAY_START = 0.15;
+const PHOTO_COLOR_AT = 0.45;
 
 export default function About() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -104,8 +109,15 @@ export default function About() {
     target: sectionRef,
     offset: ["start end", "end start"],
   });
-  // Photo moves slower than scroll (~0.6x) → parallax depth
-  const photoY = useTransform(scrollYProgress, [0, 1], [90, -90]);
+  const reduceMotion = useReducedMotion();
+  // Photo drifts against the scroll for parallax depth (off for reduced motion).
+  const photoY = useTransform(scrollYProgress, [0, 1], reduceMotion ? [0, 0] : [140, -300]);
+  // Photo starts fully desaturated and reaches full colour as it nears the
+  // middle of the viewport. Not a motion effect, so it stays for reduced motion.
+  const photoFilter = useTransform(scrollYProgress, (v) => {
+    const t = Math.min(1, Math.max(0, (v - PHOTO_GRAY_START) / (PHOTO_COLOR_AT - PHOTO_GRAY_START)));
+    return `grayscale(${(1 - t).toFixed(3)})`;
+  });
 
   return (
     <section
@@ -131,7 +143,7 @@ export default function About() {
               }}
             />
           </div>
-          <LineDraw className="mt-12 mb-16" style={{ maxWidth: 260 }} color="rgba(184,144,62,0.8)" />
+          <LineDraw className="mt-12 mb-16" style={{ maxWidth: 260 }} color="rgba(232,48,58,0.8)" />
         </ScrollScale>
 
         {/* Two columns: bio fills the left, photo/terminal hugs its content on the right */}
@@ -147,7 +159,7 @@ export default function About() {
           >
             {/* Section heading */}
             <div>
-              <p className="text-xs font-semibold tracking-widest uppercase mb-3 text-gold-metal">
+              <p className="text-xs font-semibold tracking-widest uppercase mb-3 text-accent">
                 Get to know me
               </p>
               <h2
@@ -186,7 +198,7 @@ export default function About() {
           {/* Right: photo (parallax) + terminal */}
           <div className="flex flex-col items-center gap-6">
             <motion.div style={{ y: photoY }} className="flex flex-col items-center gap-5">
-              <PortraitCard />
+              <PortraitCard filter={photoFilter} />
               {/* Name badge */}
               <div
                 className="flex items-center gap-2.5 px-4 py-2 rounded-full"
@@ -195,7 +207,7 @@ export default function About() {
                   border: "1px solid rgba(26,24,22,0.12)",
                 }}
               >
-                <span className="w-2 h-2 rounded-full bg-gold animate-pulse flex-shrink-0" />
+                <span className="w-2 h-2 rounded-full bg-accent animate-pulse flex-shrink-0" />
                 <span className="text-ink/90 text-sm font-medium" style={{ fontFamily: "var(--font-body)" }}>
                   Om Raut
                 </span>

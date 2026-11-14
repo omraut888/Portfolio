@@ -99,7 +99,7 @@ const PROJECTS: Project[] = [
 ];
 
 /** Single site accent — every project shares the same treatment. */
-const ACCENT = "#B8903E"; // borders / fills; gold text uses .text-gold-metal
+const ACCENT = "#E8303A"; // single site accent (crimson)
 
 const PANEL_EASE = [0.4, 0, 0.2, 1] as [number, number, number, number];
 
@@ -159,7 +159,7 @@ function ProjectCard({
       >
         <div style={{ flex: "1 1 auto", minWidth: 0 }}>
           <div
-            className={active ? "text-gold-metal" : undefined}
+            className={active ? "text-accent" : undefined}
             style={{
               fontFamily: "var(--font-display)",
               fontSize: "clamp(32px, 4vw, 52px)",
@@ -182,11 +182,11 @@ function ProjectCard({
           </div>
           {project.metrics.map((m) => (
             <div key={m.label} style={{ fontSize: 13, color: "rgba(255,255,255,0.5)", fontFamily: "var(--font-mono)", whiteSpace: "nowrap" }}>
-              <span className="text-gold-metal" style={{ fontWeight: 600 }}><CountUp value={m.value} /></span> {m.label}
+              <span className="text-accent" style={{ fontWeight: 600 }}><CountUp value={m.value} /></span> {m.label}
             </div>
           ))}
           <div
-            className={active ? "text-gold-metal" : undefined}
+            className={active ? "text-accent" : undefined}
             style={{
               marginTop: 8,
               fontSize: 12,
@@ -235,13 +235,13 @@ function ProjectCard({
                 <div className="flex flex-col gap-10">
                   {/* Key metrics — large numbers, no badges */}
                   <div>
-                    <div style={{ fontSize: 10, fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "0.16em", marginBottom: 18 }} className="text-gold-metal">
+                    <div style={{ fontSize: 10, fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "0.16em", marginBottom: 18 }} className="text-accent">
                       Key Metrics
                     </div>
                     <div className="flex flex-wrap gap-x-12 gap-y-8">
                       {project.metrics.map((m) => (
                         <div key={m.label}>
-                          <div className="text-gold-metal" style={{ fontFamily: "var(--font-display)", fontSize: 48, fontWeight: 400, lineHeight: 1 }}>
+                          <div className="text-accent" style={{ fontFamily: "var(--font-display)", fontSize: 48, fontWeight: 400, lineHeight: 1 }}>
                             <CountUp value={m.value} />
                           </div>
                           <div style={{ fontSize: 11, fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "0.12em", color: "rgba(255,255,255,0.45)", marginTop: 6 }}>
@@ -254,7 +254,7 @@ function ProjectCard({
 
                   {/* Tech stack — simple pills */}
                   <div>
-                    <div style={{ fontSize: 10, fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "0.16em", marginBottom: 14 }} className="text-gold-metal">
+                    <div style={{ fontSize: 10, fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "0.16em", marginBottom: 14 }} className="text-accent">
                       Tech Stack
                     </div>
                     <div className="flex flex-wrap gap-2">
@@ -297,7 +297,7 @@ function ProjectCard({
                           textDecoration: "none",
                         }}
                       >
-                        <span className="text-gold-metal">GitHub ↗</span>
+                        <span className="text-accent">GitHub ↗</span>
                       </a>
                     )}
                     <button
@@ -314,7 +314,7 @@ function ProjectCard({
                         letterSpacing: "0.03em",
                       }}
                     >
-                      <span className="text-gold-metal">← Collapse</span>
+                      <span className="text-accent">← Collapse</span>
                     </button>
                   </div>
                 </div>

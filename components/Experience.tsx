@@ -88,7 +88,7 @@ function TimelineCard({
             backdropFilter: "blur(10px)",
           }}
           onMouseEnter={(e) => {
-            (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(184,144,62,0.3)";
+            (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(232,48,58,0.3)";
             (e.currentTarget as HTMLDivElement).style.background = "rgba(255,255,255,0.04)";
           }}
           onMouseLeave={(e) => {
@@ -140,7 +140,7 @@ function TimelineCard({
                 padding: "8px 14px",
               }}
             >
-              <div className="text-xl font-black text-gold-metal">
+              <div className="text-xl font-black text-accent">
                 <CountUp value={item.stat} />
               </div>
               <div className="text-xs text-white/40 whitespace-nowrap">
@@ -189,7 +189,7 @@ function TimelineCard({
           transition={{ delay: 0.1, type: "spring", stiffness: 300 }}
           className="w-4 h-4 rounded-full z-10 mt-6"
           style={{
-            background: "var(--gold)",
+            background: "var(--accent)",
             boxShadow: "0 0 0 4px #0A0908",
           }}
         />
@@ -222,11 +222,11 @@ export default function Experience() {
       <div className="max-w-5xl mx-auto px-6">
         {/* Header */}
         <ScrollScale className="text-center mb-12">
-          <p className="text-xs font-semibold tracking-widest uppercase mb-4 text-gold-metal">
+          <p className="text-xs font-semibold tracking-widest uppercase mb-4 text-accent">
             Work History
           </p>
           <h2 className="section-heading text-white">Work Experience</h2>
-          <LineDraw className="mx-auto mt-8" style={{ maxWidth: 120 }} color="rgba(184,144,62,0.55)" />
+          <LineDraw className="mx-auto mt-8" style={{ maxWidth: 120 }} color="rgba(232,48,58,0.55)" />
         </ScrollScale>
 
         {/* Timeline */}
@@ -238,7 +238,7 @@ export default function Experience() {
               className="absolute top-0 left-0 w-full"
               style={{
                 height: lineHeight,
-                background: "rgba(184,144,62,0.5)",
+                background: "rgba(232,48,58,0.5)",
               }}
             />
           </div>

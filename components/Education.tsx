@@ -62,13 +62,13 @@ export default function Education() {
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
         <ScrollScale className="text-center mb-12">
-          <p className="text-xs font-semibold tracking-widest uppercase mb-4 text-gold-metal">
+          <p className="text-xs font-semibold tracking-widest uppercase mb-4 text-accent">
             Academic
           </p>
           <h2 className="section-heading text-ink">
             <WordReveal text="Education" />
           </h2>
-          <LineDraw className="mx-auto mt-8" style={{ maxWidth: 120 }} color="rgba(184,144,62,0.8)" />
+          <LineDraw className="mx-auto mt-8" style={{ maxWidth: 120 }} color="rgba(232,48,58,0.8)" />
         </ScrollScale>
 
         {/* School cards */}
@@ -87,11 +87,11 @@ export default function Education() {
               }}
               whileHover={{
                 scale: 1.02,
-                borderColor: "rgba(184,144,62,0.35)",
+                borderColor: "rgba(232,48,58,0.35)",
               }}
             >
               {/* Top accent line */}
-              <div className="h-px" style={{ background: "rgba(184,144,62,0.45)" }} />
+              <div className="h-px" style={{ background: "rgba(232,48,58,0.45)" }} />
 
               <div className="p-7">
                 <div className="flex items-start gap-4 mb-5">
@@ -102,7 +102,7 @@ export default function Education() {
                       border: "1px solid rgba(26,24,22,0.12)",
                     }}
                   >
-                    <school.icon size={24} className="text-gold-icon" strokeWidth={1.5} />
+                    <school.icon size={24} className="text-accent" strokeWidth={1.5} />
                   </div>
                   <div>
                     <h3 className="font-bold text-ink text-xl leading-tight">
@@ -176,7 +176,7 @@ export default function Education() {
                 whileHover={{
                   scale: 1.06,
                   y: -4,
-                  borderColor: "rgba(184,144,62,0.35)",
+                  borderColor: "rgba(232,48,58,0.35)",
                 }}
                 className="block rounded-xl p-4 text-center"
                 style={{
@@ -196,7 +196,7 @@ export default function Education() {
                 </div>
                 <div className="text-ink/50 text-[10px]">{cert.issuer}</div>
                 <div className="text-[10px] font-semibold mt-2">
-                  <span className="link-gold text-gold-metal">Verify ↗</span>
+                  <span className="link-accent text-accent">Verify ↗</span>
                 </div>
               </motion.a>
             ))}

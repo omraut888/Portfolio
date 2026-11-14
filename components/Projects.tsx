@@ -12,7 +12,7 @@ export default function Projects() {
     >
       <div className="max-w-7xl mx-auto px-6">
         <ScrollScale className="text-center mb-12">
-          <p className="text-xs font-semibold tracking-widest uppercase mb-4 text-gold-metal">
+          <p className="text-xs font-semibold tracking-widest uppercase mb-4 text-accent">
             Portfolio
           </p>
           <h2 className="section-heading text-white">Featured Projects</h2>

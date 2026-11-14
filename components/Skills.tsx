@@ -67,11 +67,11 @@ export default function Skills() {
       <div className="max-w-5xl mx-auto px-6">
         {/* Header */}
         <ScrollScale className="text-center mb-12">
-          <p className="text-xs font-semibold tracking-widest uppercase mb-4 text-gold-metal">
+          <p className="text-xs font-semibold tracking-widest uppercase mb-4 text-accent">
             CAPABILITIES
           </p>
           <h2 className="section-heading text-white">Skills &amp; Technologies</h2>
-          <LineDraw className="mx-auto mt-8" style={{ maxWidth: 120 }} color="rgba(184,144,62,0.55)" />
+          <LineDraw className="mx-auto mt-8" style={{ maxWidth: 120 }} color="rgba(232,48,58,0.55)" />
         </ScrollScale>
 
         {/* Two-column masonry index */}
