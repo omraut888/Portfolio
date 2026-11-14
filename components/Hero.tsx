@@ -1,11 +1,12 @@
 "use client";
 
 import { useCallback, useRef } from "react";
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useReducedMotionSafe } from "@/hooks/useReducedMotionSafe";
 import dynamic from "next/dynamic";
 import type { Variants } from "framer-motion";
 import { useTypewriter } from "@/hooks/useTypewriter";
-import { useMagneticHover } from "@/hooks/useMagneticHover";
+import { useMagnetic } from "@/hooks/useMagnetic";
 import { scrubOpacity } from "./Reveal";
 
 const ROLES = [
@@ -52,8 +53,8 @@ const fadeUp: Variants = {
 export default function Hero() {
   const { displayText } = useTypewriter({ words: ROLES });
 
-  const primaryBtn = useMagneticHover<HTMLButtonElement>({ strength: 0.4 });
-  const secondaryBtn = useMagneticHover<HTMLButtonElement>({ strength: 0.4 });
+  const primaryBtn = useMagnetic<HTMLButtonElement>();
+  const secondaryBtn = useMagnetic<HTMLButtonElement>();
 
   const scrollTo = useCallback((id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -65,7 +66,7 @@ export default function Hero() {
   // The name leaves the viewport after roughly the first third of the hero's
   // scroll, so both effects complete within the first half to stay on-screen.
   const heroRef = useRef<HTMLElement>(null);
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useReducedMotionSafe();
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const nameScale = useTransform(scrollYProgress, [0, 0.5], [1, reduceMotion ? 1 : 1.35]);
   const nameOpacity = useTransform(scrollYProgress, scrubOpacity([0, 0.45], [1, 0]));
@@ -166,11 +167,9 @@ export default function Hero() {
 
         {/* CTA Buttons */}
         <motion.div variants={fadeUp} className="flex flex-wrap items-center justify-center gap-4">
-          <button
+          <motion.button
             ref={primaryBtn.ref}
-            onMouseMove={primaryBtn.onMouseMove}
             onMouseLeave={() => {
-              primaryBtn.onMouseLeave();
               const btn = primaryBtn.ref.current;
               if (btn) btn.style.background = "transparent";
             }}
@@ -180,6 +179,8 @@ export default function Hero() {
             }}
             className="relative overflow-hidden px-8 py-3.5 rounded-full font-semibold text-sm"
             style={{
+              x: primaryBtn.x,
+              y: primaryBtn.y,
               background: "transparent",
               border: "1px solid var(--accent)",
               transition: "background 0.3s",
@@ -189,13 +190,11 @@ export default function Hero() {
             }}
           >
             <span className="text-accent">View My Work</span>
-          </button>
+          </motion.button>
 
-          <button
+          <motion.button
             ref={secondaryBtn.ref}
-            onMouseMove={secondaryBtn.onMouseMove}
             onMouseLeave={() => {
-              secondaryBtn.onMouseLeave();
               const btn = secondaryBtn.ref.current;
               if (btn) {
                 btn.style.background = "rgba(255,255,255,0.05)";
@@ -208,6 +207,8 @@ export default function Hero() {
             }}
             className="relative overflow-hidden px-8 py-3.5 rounded-full font-semibold text-white text-sm"
             style={{
+              x: secondaryBtn.x,
+              y: secondaryBtn.y,
               background: "rgba(255,255,255,0.05)",
               border: "1px solid rgba(255,255,255,0.15)",
               backdropFilter: "blur(10px)",
@@ -219,7 +220,7 @@ export default function Hero() {
             }}
           >
             Contact Me
-          </button>
+          </motion.button>
         </motion.div>
 
         {/* Scroll indicator */}

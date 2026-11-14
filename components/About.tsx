@@ -2,9 +2,10 @@
 
 import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
-import { motion, useScroll, useTransform, useInView, useReducedMotion } from "framer-motion";
+import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { useReducedMotionSafe } from "@/hooks/useReducedMotionSafe";
 import type { MotionValue } from "framer-motion";
-import { WordReveal, LineDraw, ScrollScale } from "./Reveal";
+import { LineDraw, WordStagger } from "./Reveal";
 
 const TERMINAL_LINES = [
   { cmd: "whoami",    out: "Om Raut, AI Engineer"                   },
@@ -109,7 +110,7 @@ export default function About() {
     target: sectionRef,
     offset: ["start end", "end start"],
   });
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useReducedMotionSafe();
   // Photo drifts against the scroll for parallax depth (off for reduced motion).
   const photoY = useTransform(scrollYProgress, [0, 1], reduceMotion ? [0, 0] : [140, -300]);
   // Photo starts fully desaturated and reaches full colour as it nears the
@@ -128,9 +129,9 @@ export default function About() {
 
       <div className="max-w-7xl mx-auto px-6">
         {/* Statement line */}
-        <ScrollScale style={{ transformOrigin: "left center" }}>
+        <div>
           <div className="max-w-4xl">
-            <WordReveal
+            <WordStagger
               text="I build systems that think."
               style={{
                 fontFamily: "var(--font-headline)",
@@ -144,7 +145,7 @@ export default function About() {
             />
           </div>
           <LineDraw className="mt-12 mb-16" style={{ maxWidth: 260 }} color="rgba(232,48,58,0.8)" />
-        </ScrollScale>
+        </div>
 
         {/* Two columns: bio fills the left, photo/terminal hugs its content on the right */}
         <div className="grid lg:grid-cols-[1fr_max-content] gap-12 lg:gap-16 items-stretch">

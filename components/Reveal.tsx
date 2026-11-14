@@ -7,10 +7,10 @@ import {
   motion,
   transform,
   useInView,
-  useReducedMotion,
   useScroll,
   useTransform,
 } from "framer-motion";
+import { useReducedMotionSafe } from "@/hooks/useReducedMotionSafe";
 
 const CURTAIN = [0.76, 0, 0.24, 1] as [number, number, number, number];
 const RISE = [0.22, 1, 0.36, 1] as [number, number, number, number];
@@ -112,6 +112,53 @@ export function LineDraw({
 }
 
 /**
+ * Per-word staggered reveal for big statement headings: each word fades in
+ * and rises 20px, ~0.05s apart, once the heading's top crosses 80% of the
+ * viewport (the same trigger point ScrollScale starts at). Fires once.
+ * Reduced motion: all words appear at once, instantly (no stagger, no rise).
+ * Always starts "hidden" so the server and client render the same markup.
+ */
+export function WordStagger({
+  text,
+  className,
+  style,
+  stagger = 0.05,
+}: {
+  text: string;
+  className?: string;
+  style?: CSSProperties;
+  stagger?: number;
+}) {
+  const reduce = useReducedMotionSafe();
+  const words = text.split(" ");
+  return (
+    <motion.span
+      className={className}
+      style={{ display: "inline-block", ...style }}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "0px 0px -20% 0px" }}
+      variants={{ hidden: {}, visible: { transition: { staggerChildren: reduce ? 0 : stagger } } }}
+    >
+      {words.map((w, i) => (
+        <span key={i}>
+          <motion.span
+            style={{ display: "inline-block" }}
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0, transition: reduce ? { duration: 0 } : { duration: 0.6, ease: RISE } },
+            }}
+          >
+            {w}
+          </motion.span>
+          {i < words.length - 1 ? " " : ""}
+        </span>
+      ))}
+    </motion.span>
+  );
+}
+
+/**
  * Opacity is derived through a JS function on purpose: framer-motion hands a
  * plain `useTransform(scrollYProgress, …)` opacity to the browser's native
  * ScrollTimeline, which ignores `target`/`offset` and tracks whole-page scroll.
@@ -135,7 +182,7 @@ export function ScrollScale({
   style?: CSSProperties;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionSafe();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.8", "start 0.3"] });
   const opacity = useTransform(scrollYProgress, scrubOpacity([0, 1], [0, 1]));
   const scale = useTransform(scrollYProgress, [0, 1], [reduce ? 1 : 0.7, 1]);
@@ -165,7 +212,7 @@ export function ScrollSlide({
   style?: CSSProperties;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionSafe();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.95", "start 0.55"] });
   const from = index % 2 === 0 ? -120 : 120;
   const opacity = useTransform(scrollYProgress, scrubOpacity([0, 1], [0, 1]));
@@ -187,7 +234,7 @@ export function ScrollSlide({
  */
 export function CountUp({ value, duration = 1.2 }: { value: string; duration?: number }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionSafe();
   const inView = useInView(ref, { once: true, amount: 0.6 });
   const match = value.match(/\d[\d,]*(?:\.\d+)?/);
   const [display, setDisplay] = useState(value);

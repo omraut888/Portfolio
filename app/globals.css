@@ -253,6 +253,52 @@ section {
   filter: grayscale(1) contrast(1.15) brightness(0.9);
 }
 
+/* Hero → content ticker (components/Marquee.tsx). ~40s per loop, paused on hover. */
+.marquee {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  width: 100%;
+  padding: 14px 0;
+  background: #030308;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 40s linear infinite;
+  will-change: transform;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+.marquee-half {
+  display: flex;
+  flex-shrink: 0;
+}
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  font-family: var(--font-headline);
+  font-size: 15px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.22);
+}
+.marquee-sep {
+  margin: 0 1.1em;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+}
+
 /* Skills ticker scroll */
 @keyframes scroll {
   0% { transform: translateX(0); }

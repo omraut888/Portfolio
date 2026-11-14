@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { useMagnetic } from "@/hooks/useMagnetic";
 
 const sections = ["hero", "about", "skills", "experience", "projects", "education", "contact"];
 const labels = ["Home", "About", "Skills", "Experience", "Projects", "Education", "Contact"];
@@ -11,6 +12,7 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { scrollY } = useScroll();
+  const hireMe = useMagnetic<HTMLButtonElement>();
 
   const navBg = useTransform(
     scrollY,
@@ -110,9 +112,12 @@ export default function Navbar() {
 
         {/* CTA */}
         <motion.button
+          ref={hireMe.ref}
           onClick={() => scrollTo("contact")}
           className="hidden md:flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold"
           style={{
+            x: hireMe.x,
+            y: hireMe.y,
             background: "rgba(232,48,58,0)",
             border: "1px solid #E8303A",
           }}
