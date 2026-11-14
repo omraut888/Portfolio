@@ -26,7 +26,7 @@ export default function LoadingAnimation() {
           <motion.div
             className="absolute inset-0"
             style={{
-              background: "linear-gradient(135deg, #060318 0%, #030308 100%)",
+              background: "#030308",
             }}
             exit={{
               clipPath: "inset(0 100% 0 0)",
@@ -46,10 +46,7 @@ export default function LoadingAnimation() {
                 fontWeight: 300,
                 letterSpacing: "-0.04em",
                 lineHeight: 1,
-                background: "linear-gradient(135deg, #c8d0e0, #00e5ff, #c9a54e)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
+                color: "#ffffff",
               }}
             >
               OR
@@ -75,7 +72,7 @@ export default function LoadingAnimation() {
               <motion.div
                 className="h-full rounded-full"
                 style={{
-                  background: "linear-gradient(90deg, #7040c0, #00e5ff, #c9a54e)",
+                  background: "#B8903E",
                 }}
                 initial={{ width: "0%" }}
                 animate={{ width: "100%" }}

@@ -1,41 +1,14 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { useInView } from "framer-motion";
-import { ClipReveal } from "./Reveal";
+import { useState } from "react";
+import { ClipReveal, CountUp } from "./Reveal";
 
 const STATS = [
-  { target: 10, suffix: "B+", label: "Vectors in Production", color: "#00e5ff", decimals: 0 },
-  { target: 86.7, suffix: "%", label: "RAG Accuracy", color: "#7040c0", decimals: 1 },
-  { target: 5, suffix: "", label: "AI Agents Built", color: "#c9a54e", decimals: 0 },
-  { target: 3, suffix: "", label: "Production Systems", color: "#2563eb", decimals: 0 },
+  { target: 10, suffix: "B+", label: "Vectors in Production", decimals: 0 },
+  { target: 86.7, suffix: "%", label: "RAG Accuracy", decimals: 1 },
+  { target: 5, suffix: "", label: "AI Agents Built", decimals: 0 },
+  { target: 3, suffix: "", label: "Production Systems", decimals: 0 },
 ];
-
-function Counter({ target, suffix, decimals }: { target: number; suffix: string; decimals: number }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.5, margin: "-50px" });
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    if (!inView) return;
-    const duration = 1900;
-    const start = performance.now();
-    const step = (now: number) => {
-      const p = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      setCount(eased * target);
-      if (p < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }, [inView, target]);
-
-  return (
-    <span ref={ref}>
-      {count.toFixed(decimals)}
-      {suffix}
-    </span>
-  );
-}
 
 function StatItem({ stat, index }: { stat: (typeof STATS)[0]; index: number }) {
   const [hover, setHover] = useState(false);
@@ -45,22 +18,20 @@ function StatItem({ stat, index }: { stat: (typeof STATS)[0]; index: number }) {
       onMouseLeave={() => setHover(false)}
       className="flex flex-col items-center justify-center text-center px-6 py-6"
       style={{
-        borderLeft: index === 0 ? "none" : "1px solid rgba(255,255,255,0.08)",
+        borderLeft: index === 0 ? "none" : "1px solid rgba(26,24,22,0.12)",
       }}
     >
       <div
+        className={hover ? "text-gold-metal" : undefined}
         style={{
           fontFamily: "var(--font-headline)",
           fontSize: "clamp(60px, 8vw, 100px)",
           fontWeight: 400,
           lineHeight: 1,
           letterSpacing: "0.01em",
-          color: hover ? stat.color : "#ffffff",
-          textShadow: hover ? `0 0 40px ${stat.color}80` : "none",
-          transition: "color 0.4s, text-shadow 0.4s",
         }}
       >
-        <Counter target={stat.target} suffix={stat.suffix} decimals={stat.decimals} />
+        <CountUp value={stat.target.toFixed(stat.decimals) + stat.suffix} />
       </div>
       <div
         className="mt-4"
@@ -69,7 +40,7 @@ function StatItem({ stat, index }: { stat: (typeof STATS)[0]; index: number }) {
           fontSize: 11,
           textTransform: "uppercase",
           letterSpacing: "0.2em",
-          color: "rgba(255,255,255,0.4)",
+          color: "rgba(26,24,22,0.5)",
         }}
       >
         {stat.label}
@@ -80,10 +51,10 @@ function StatItem({ stat, index }: { stat: (typeof STATS)[0]; index: number }) {
 
 export default function Stats() {
   return (
-    <section className="relative z-10 pt-16 pb-16">
+    <section className="surface-light relative z-10 pt-16 pb-16">
       <div className="max-w-7xl mx-auto px-6">
         <ClipReveal>
-          <p className="text-center text-white/35 text-sm font-mono uppercase tracking-[0.25em] mb-10">
+          <p className="text-center text-ink/50 text-sm font-mono uppercase tracking-[0.25em] mb-10">
             Only the real numbers here
           </p>
           <div className="grid grid-cols-2 lg:grid-cols-4">

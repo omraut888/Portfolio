@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { GraduationCap, Landmark, Bot, Database, Cpu, BarChart3 } from "lucide-react";
-import { ClipReveal, WordReveal, LineDraw } from "./Reveal";
+import { CountUp, WordReveal, LineDraw, ScrollScale } from "./Reveal";
 
 const schools = [
   {
@@ -12,10 +12,7 @@ const schools = [
     location: "Boston, MA",
     period: "Expected Dec 2026",
     gpa: "3.39",
-    color: "#00e5ff",
-    accentColor: "#00e5ff",
     icon: GraduationCap,
-    gradient: "linear-gradient(135deg, #001820, #0a3d4a)",
   },
   {
     name: "D.Y. Patil University",
@@ -24,10 +21,7 @@ const schools = [
     location: "Mumbai, India",
     period: "Aug 2020 – May 2024",
     gpa: "3.33",
-    color: "#7040c0",
-    accentColor: "#9d7be0",
     icon: Landmark,
-    gradient: "linear-gradient(135deg, #12002b, #3a1e5f)",
   },
 ];
 
@@ -35,28 +29,24 @@ const certifications = [
   {
     title: "OCI 2025 Certified Data Science Professional",
     issuer: "Oracle",
-    color: "#c9a54e",
     icon: Database,
     url: "https://catalog-education.oracle.com/ords/certview/sharebadge?id=0126302BCDA638530DE3D17D187A73056CF0A5AE6418A3749F894BB0F5D64F75",
   },
   {
     title: "OCI 2025 Certified Generative AI Professional",
     issuer: "Oracle",
-    color: "#00e5ff",
     icon: Bot,
     url: "https://catalog-education.oracle.com/pls/certview/sharebadge?id=72855E378E3491FD6233A89FC5431377D5550AE6A3BBF295FF20B02D714E4C8E",
   },
   {
     title: "Machine Learning Introduction for Everyone",
     issuer: "IBM (via Coursera)",
-    color: "#00c8a0",
     icon: Cpu,
     url: "https://coursera.org/verify/KBDKDI8QKNF9",
   },
   {
     title: "Business Analytics",
     issuer: "Harvard Business School Online · Nov 2021",
-    color: "#7040c0",
     icon: BarChart3,
     url: "https://online.hbs.edu/verify-certificate?dvid=V38HGA4L",
   },
@@ -66,30 +56,20 @@ export default function Education() {
   return (
     <section
       id="education"
-      className="relative z-10 pt-16 pb-16 overflow-hidden"
-      style={{
-        background: "linear-gradient(180deg, rgba(3,3,8,0.82) 0%, rgba(6,3,24,0.78) 50%, rgba(3,3,8,0.82) 100%)",
-      }}
+      className="surface-light relative z-10 pt-16 pb-16 overflow-hidden"
     >
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle at 30% 70%, rgba(112,64,192,0.04) 0%, transparent 50%)",
-        }}
-      />
 
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
-        <ClipReveal className="text-center mb-12">
-          <p className="text-xs font-semibold tracking-widest uppercase mb-4" style={{ color: "#00e5ff" }}>
+        <ScrollScale className="text-center mb-12">
+          <p className="text-xs font-semibold tracking-widest uppercase mb-4 text-gold-metal">
             Academic
           </p>
-          <h2 className="section-heading text-white">
+          <h2 className="section-heading text-ink">
             <WordReveal text="Education" />
           </h2>
-          <LineDraw className="mx-auto mt-8" style={{ maxWidth: 120 }} color="rgba(201,165,78,0.55)" />
-        </ClipReveal>
+          <LineDraw className="mx-auto mt-8" style={{ maxWidth: 120 }} color="rgba(184,144,62,0.8)" />
+        </ScrollScale>
 
         {/* School cards */}
         <div className="grid md:grid-cols-2 gap-6 mb-16">
@@ -102,42 +82,39 @@ export default function Education() {
               transition={{ duration: 0.6, delay: i * 0.15 }}
               className="rounded-2xl overflow-hidden"
               style={{
-                background: "rgba(255,255,255,0.03)",
-                border: `1px solid ${school.color}30`,
+                background: "rgba(255,255,255,0.55)",
+                border: "1px solid rgba(26,24,22,0.12)",
               }}
               whileHover={{
                 scale: 1.02,
-                boxShadow: `0 20px 60px ${school.color}15`,
+                borderColor: "rgba(184,144,62,0.35)",
               }}
             >
-              {/* Gradient top bar */}
-              <div
-                className="h-1.5"
-                style={{ background: school.gradient }}
-              />
+              {/* Top accent line */}
+              <div className="h-px" style={{ background: "rgba(184,144,62,0.45)" }} />
 
               <div className="p-7">
                 <div className="flex items-start gap-4 mb-5">
                   <div
                     className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
                     style={{
-                      background: `${school.color}15`,
-                      border: `1px solid ${school.color}30`,
+                      background: "rgba(26,24,22,0.04)",
+                      border: "1px solid rgba(26,24,22,0.12)",
                     }}
                   >
-                    <school.icon size={24} color={school.accentColor} />
+                    <school.icon size={24} className="text-gold-icon" strokeWidth={1.5} />
                   </div>
                   <div>
-                    <h3 className="font-bold text-white text-xl leading-tight">
+                    <h3 className="font-bold text-ink text-xl leading-tight">
                       {school.name}
                     </h3>
                     <p
                       className="font-semibold text-sm mt-0.5"
-                      style={{ color: school.accentColor }}
+                      style={{ color: "rgba(26,24,22,0.65)" }}
                     >
                       {school.degree}
                     </p>
-                    {school.track && <p className="text-white/40 text-xs mt-0.5">{school.track}</p>}
+                    {school.track && <p className="text-ink/55 text-xs mt-0.5">{school.track}</p>}
                   </div>
                 </div>
 
@@ -150,13 +127,13 @@ export default function Education() {
                     <div
                       key={item.label}
                       className="rounded-xl p-3"
-                      style={{ background: "rgba(255,255,255,0.04)" }}
+                      style={{ background: "rgba(26,24,22,0.04)" }}
                     >
-                      <div className="text-white/35 text-[10px] uppercase tracking-wider mb-1">
+                      <div className="text-ink/50 text-[10px] uppercase tracking-wider mb-1">
                         {item.label}
                       </div>
-                      <div className="text-white/80 text-sm font-semibold">
-                        {item.value}
+                      <div className="text-ink/85 text-sm font-semibold">
+                        {item.label === "GPA" ? <CountUp value={item.value} /> : item.value}
                       </div>
                     </div>
                   ))}
@@ -175,7 +152,7 @@ export default function Education() {
         >
           <h3
             className="text-center mb-8"
-            style={{ fontSize: 24, fontWeight: 600, letterSpacing: "0.02em", color: "#f5efe8" }}
+            style={{ fontSize: 24, fontWeight: 600, letterSpacing: "0.02em", color: "var(--ink)" }}
           >
             Certifications &amp; Badges
           </h3>
@@ -199,27 +176,27 @@ export default function Education() {
                 whileHover={{
                   scale: 1.06,
                   y: -4,
-                  boxShadow: `0 10px 30px ${cert.color}25`,
+                  borderColor: "rgba(184,144,62,0.35)",
                 }}
                 className="block rounded-xl p-4 text-center"
                 style={{
-                  background: `${cert.color}10`,
-                  border: `1px solid ${cert.color}25`,
+                  background: "rgba(255,255,255,0.55)",
+                  border: "1px solid rgba(26,24,22,0.12)",
                   backdropFilter: "blur(10px)",
                 }}
               >
                 <div className="h-8 mb-2 flex items-center justify-center">
-                  <cert.icon size={24} color={cert.color} />
+                  <cert.icon size={24} color="rgba(26,24,22,0.75)" strokeWidth={1.5} />
                 </div>
                 <div
                   className="font-bold text-xs leading-tight mb-1"
-                  style={{ color: cert.color }}
+                  style={{ color: "rgba(26,24,22,0.9)" }}
                 >
                   {cert.title}
                 </div>
-                <div className="text-white/30 text-[10px]">{cert.issuer}</div>
-                <div className="text-[10px] font-semibold mt-2" style={{ color: cert.color }}>
-                  <span className="link-gold">Verify ↗</span>
+                <div className="text-ink/50 text-[10px]">{cert.issuer}</div>
+                <div className="text-[10px] font-semibold mt-2">
+                  <span className="link-gold text-gold-metal">Verify ↗</span>
                 </div>
               </motion.a>
             ))}

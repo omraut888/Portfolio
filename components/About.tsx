@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
-import { ClipReveal, WordReveal, LineDraw } from "./Reveal";
+import { WordReveal, LineDraw, ScrollScale } from "./Reveal";
 
 const TERMINAL_LINES = [
   { cmd: "whoami",    out: "Om Raut, AI Engineer"                   },
@@ -43,25 +43,25 @@ function Terminal() {
     >
       {/* macOS traffic lights */}
       <div className="flex items-center gap-1.5 px-3 py-2.5" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-        <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#ff5f56" }} />
-        <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#ffbd2e" }} />
-        <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#27c93f" }} />
+        <span className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(255,255,255,0.18)" }} />
+        <span className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(255,255,255,0.18)" }} />
+        <span className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(255,255,255,0.18)" }} />
         <span className="ml-2 text-white/25 text-[10px]">career.sh</span>
       </div>
       <div className="p-3 space-y-1.5 text-xs">
         {TERMINAL_LINES.slice(0, visibleLines).map((line, i) => (
           <div key={i}>
-            <span style={{ color: "#00e5ff" }}>$ </span>
-            <span style={{ color: "#00e5c0" }}>{line.cmd}</span>
+            <span className="text-gold-metal">$ </span>
+            <span style={{ color: "rgba(255,255,255,0.85)" }}>{line.cmd}</span>
             <div style={{ color: "rgba(255,255,255,0.55)", paddingLeft: "1em" }}>{line.out}</div>
           </div>
         ))}
         {visibleLines < TERMINAL_LINES.length && (
           <div>
-            <span style={{ color: "#00e5ff" }}>$ </span>
+            <span className="text-gold-metal">$ </span>
             <span
               className="inline-block w-1.5 h-3 align-middle animate-[cursorBlink_1s_step-end_infinite]"
-              style={{ background: "#00e5ff" }}
+              style={{ background: "var(--gold)" }}
             />
           </div>
         )}
@@ -74,7 +74,7 @@ function PortraitCard() {
   return (
     <div
       className="group relative rounded-2xl overflow-hidden"
-      style={{ width: 300, height: 440, boxShadow: "0 32px 90px rgba(0,0,0,0.9)" }}
+      style={{ width: 300, height: 440, boxShadow: "0 28px 70px rgba(26,24,22,0.28)" }}
     >
       <Image src="/profile.jpg" alt="Om Raut" fill className="object-cover xray-photo" />
       <div className="xray-line" />
@@ -83,16 +83,16 @@ function PortraitCard() {
       <div className="absolute inset-y-0 left-0 pointer-events-none" style={{ width: "15%", background: "linear-gradient(to right, rgba(0,0,0,0.4), transparent)" }} />
       <div className="absolute inset-y-0 right-0 pointer-events-none" style={{ width: "15%", background: "linear-gradient(to left, rgba(0,0,0,0.4), transparent)" }} />
       <svg className="absolute top-3 left-3 z-10" width="18" height="18" viewBox="0 0 18 18" fill="none">
-        <path d="M0 14 L0 0 L14 0" stroke="white" strokeWidth="1.5" strokeOpacity="0.45" className="transition-[stroke,stroke-opacity] duration-500 group-hover:stroke-[#00e5ff] group-hover:[stroke-opacity:0.95]" />
+        <path d="M0 14 L0 0 L14 0" stroke="white" strokeWidth="1.5" strokeOpacity="0.45" className="transition-[stroke,stroke-opacity] duration-500 group-hover:stroke-[#B8903E] group-hover:[stroke-opacity:0.95]" />
       </svg>
       <svg className="absolute top-3 right-3 z-10" width="18" height="18" viewBox="0 0 18 18" fill="none">
-        <path d="M18 14 L18 0 L4 0" stroke="white" strokeWidth="1.5" strokeOpacity="0.45" className="transition-[stroke,stroke-opacity] duration-500 group-hover:stroke-[#00e5ff] group-hover:[stroke-opacity:0.95]" />
+        <path d="M18 14 L18 0 L4 0" stroke="white" strokeWidth="1.5" strokeOpacity="0.45" className="transition-[stroke,stroke-opacity] duration-500 group-hover:stroke-[#B8903E] group-hover:[stroke-opacity:0.95]" />
       </svg>
       <svg className="absolute bottom-3 left-3 z-10" width="18" height="18" viewBox="0 0 18 18" fill="none">
-        <path d="M0 4 L0 18 L14 18" stroke="white" strokeWidth="1.5" strokeOpacity="0.45" className="transition-[stroke,stroke-opacity] duration-500 group-hover:stroke-[#00e5ff] group-hover:[stroke-opacity:0.95]" />
+        <path d="M0 4 L0 18 L14 18" stroke="white" strokeWidth="1.5" strokeOpacity="0.45" className="transition-[stroke,stroke-opacity] duration-500 group-hover:stroke-[#B8903E] group-hover:[stroke-opacity:0.95]" />
       </svg>
       <svg className="absolute bottom-3 right-3 z-10" width="18" height="18" viewBox="0 0 18 18" fill="none">
-        <path d="M18 4 L18 18 L4 18" stroke="white" strokeWidth="1.5" strokeOpacity="0.45" className="transition-[stroke,stroke-opacity] duration-500 group-hover:stroke-[#00e5ff] group-hover:[stroke-opacity:0.95]" />
+        <path d="M18 4 L18 18 L4 18" stroke="white" strokeWidth="1.5" strokeOpacity="0.45" className="transition-[stroke,stroke-opacity] duration-500 group-hover:stroke-[#B8903E] group-hover:[stroke-opacity:0.95]" />
       </svg>
     </div>
   );
@@ -111,23 +111,12 @@ export default function About() {
     <section
       id="about"
       ref={sectionRef}
-      className="relative z-10 pt-16 pb-16 overflow-hidden"
-      style={{
-        background: "linear-gradient(180deg, rgba(3,3,8,0.82) 0%, rgba(6,3,24,0.78) 50%, rgba(3,3,8,0.82) 100%)",
-      }}
+      className="surface-light relative z-10 pt-16 pb-16 overflow-hidden"
     >
-      {/* Ambient glow */}
-      <div
-        className="absolute left-1/4 top-1/3 w-96 h-96 rounded-full pointer-events-none"
-        style={{
-          background: "radial-gradient(circle, rgba(0,229,255,0.05) 0%, transparent 70%)",
-          filter: "blur(40px)",
-        }}
-      />
 
       <div className="max-w-7xl mx-auto px-6">
         {/* Statement line */}
-        <ClipReveal>
+        <ScrollScale style={{ transformOrigin: "left center" }}>
           <div className="max-w-4xl">
             <WordReveal
               text="I build systems that think."
@@ -136,14 +125,14 @@ export default function About() {
                 fontSize: "clamp(48px, 8vw, 120px)",
                 fontWeight: 400,
                 lineHeight: 1.02,
-                color: "#ffffff",
+                color: "var(--ink)",
                 letterSpacing: "0.005em",
                 textTransform: "uppercase",
               }}
             />
           </div>
-          <LineDraw className="mt-12 mb-16" style={{ maxWidth: 260 }} color="rgba(0,229,255,0.4)" />
-        </ClipReveal>
+          <LineDraw className="mt-12 mb-16" style={{ maxWidth: 260 }} color="rgba(184,144,62,0.8)" />
+        </ScrollScale>
 
         {/* Two columns: bio fills the left, photo/terminal hugs its content on the right */}
         <div className="grid lg:grid-cols-[1fr_max-content] gap-12 lg:gap-16 items-stretch">
@@ -158,7 +147,7 @@ export default function About() {
           >
             {/* Section heading */}
             <div>
-              <p className="text-xs font-semibold tracking-widest uppercase mb-3" style={{ color: "#00e5ff" }}>
+              <p className="text-xs font-semibold tracking-widest uppercase mb-3 text-gold-metal">
                 Get to know me
               </p>
               <h2
@@ -169,27 +158,27 @@ export default function About() {
                   lineHeight: 1.05,
                   letterSpacing: "0.01em",
                   textTransform: "uppercase",
-                  color: "#ffffff",
+                  color: "var(--ink)",
                 }}
               >
                 About Me
               </h2>
             </div>
 
-            <p style={{ width: "100%", margin: 0, fontSize: 17, lineHeight: 1.8, color: "rgba(255,255,255,0.62)" }}>
+            <p style={{ width: "100%", margin: 0, fontSize: 17, lineHeight: 1.8, color: "rgba(26,24,22,0.72)" }}>
               I&apos;m an AI/ML Engineer and MS Information Systems candidate at Northeastern
               University, focused on building production-grade RAG systems, multi-agent
               architectures, and LLM-powered applications that hold up under real traffic.
             </p>
-            <p style={{ width: "100%", margin: 0, fontSize: 17, lineHeight: 1.8, color: "rgba(255,255,255,0.62)" }}>
+            <p style={{ width: "100%", margin: 0, fontSize: 17, lineHeight: 1.8, color: "rgba(26,24,22,0.72)" }}>
               My work turns messy, high-volume data problems into systems that reason,
               retrieve, and act — from 10B+ vector embeddings in production to agent
               pipelines with human-in-the-loop safeguards. I care about the unglamorous
               parts: latency, evaluation, and correctness at the boundaries.
             </p>
-            <p style={{ width: "100%", margin: 0, fontSize: 17, lineHeight: 1.8, color: "rgba(255,255,255,0.62)" }}>
+            <p style={{ width: "100%", margin: 0, fontSize: 17, lineHeight: 1.8, color: "rgba(26,24,22,0.72)" }}>
               Previously built AI at{" "}
-              <span style={{ color: "#00e5ff" }}>The Ticker App</span> (Feb 2026 – Aug 2026),
+              <span style={{ color: "var(--ink)", fontWeight: 500 }}>The Ticker App</span> (Feb 2026 – Aug 2026),
               where I shipped retrieval and multi-agent infrastructure that reached real users.
             </p>
           </motion.div>
@@ -202,17 +191,15 @@ export default function About() {
               <div
                 className="flex items-center gap-2.5 px-4 py-2 rounded-full"
                 style={{
-                  background: "rgba(255,255,255,0.06)",
-                  backdropFilter: "blur(12px)",
-                  WebkitBackdropFilter: "blur(12px)",
-                  border: "1px solid rgba(255,255,255,0.1)",
+                  background: "rgba(26,24,22,0.04)",
+                  border: "1px solid rgba(26,24,22,0.12)",
                 }}
               >
-                <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse flex-shrink-0" />
-                <span className="text-white/90 text-sm font-medium" style={{ fontFamily: "var(--font-body)" }}>
+                <span className="w-2 h-2 rounded-full bg-gold animate-pulse flex-shrink-0" />
+                <span className="text-ink/90 text-sm font-medium" style={{ fontFamily: "var(--font-body)" }}>
                   Om Raut
                 </span>
-                <span className="text-white/40 text-xs" style={{ fontFamily: "var(--font-mono)" }}>
+                <span className="text-ink/50 text-xs" style={{ fontFamily: "var(--font-mono)" }}>
                   NEU 2026
                 </span>
               </div>

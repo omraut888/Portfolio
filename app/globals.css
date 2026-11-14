@@ -21,14 +21,16 @@
 :root {
   --background: #030308;
   --foreground: #ffffff;
-  /* Refined, slightly muted gold — sparing accent only (hovers, underlines, key stats) */
-  --gold: #c9a54e;
-  --violet: #7040c0;
-  --cyan: #00e5ff;
-  --chrome: #c8d0e0;
-  --rust: #00e5ff;
-  --amber: #c9a54e;
-  --navy: #060318;
+  /* Gold accent, used sparingly.
+     --gold: flat, deepened/warmed — for borders, underlines and solid fills.
+     --gold-text: metallic gradient for gold TEXT (via .text-gold-metal);
+     --gold-text-fallback: solid colour where gradient text can't render (SVG icons, old browsers). */
+  --gold: #B8903E;
+  --gold-text: linear-gradient(135deg, #F4E5B8 0%, #C9A227 45%, #8A6A1E 100%);
+  --gold-text-fallback: #C9A227;
+  /* Light (cream) sections */
+  --cream: #F5F0E6;
+  --ink: #1A1816;
   --ink: #030308;
   --s1: #101010; --s2: #141414; --s3: #1a1a1a;
   --s4: #202020; --s5: #282828; --s6: #303030;
@@ -49,6 +51,9 @@
 }
 
 html {
+  /* framer-motion's useScroll measures against the page scroller (<html>) and
+     expects it to be non-static. */
+  position: relative;
   scroll-behavior: smooth;
   background: #030308;
 }
@@ -76,7 +81,7 @@ body {
   background: #030308;
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #7040c0, #00e5ff);
+  background: rgba(184, 144, 62, 0.6);
   border-radius: 2px;
 }
 
@@ -94,37 +99,6 @@ body {
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.12);
-  }
-
-  .text-shimmer {
-    background: linear-gradient(
-      90deg,
-      #ffffff 0%,
-      #00e5ff 25%,
-      #ffffff 50%,
-      #c9a54e 75%,
-      #ffffff 100%
-    );
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: shimmer 3s linear infinite;
-  }
-
-  .text-blue-gradient {
-    background: linear-gradient(135deg, #00e5ff, #c9a54e);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .glow-blue {
-    box-shadow: 0 0 20px rgba(0, 229, 255, 0.4), 0 0 60px rgba(0, 229, 255, 0.1);
-  }
-
-  .glow-purple {
-    box-shadow: 0 0 20px rgba(112, 64, 192, 0.4), 0 0 60px rgba(112, 64, 192, 0.1);
   }
 
   .btn-magnetic {
@@ -161,11 +135,48 @@ body {
     transition: transform 0.35s var(--ease);
   }
   .link-gold:hover {
-    color: var(--gold);
+    color: var(--gold-text-fallback);
+  }
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    .link-gold:hover {
+      background-image: var(--gold-text);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
   }
   .link-gold:hover::after {
     transform: scaleX(1);
   }
+}
+
+/* Metallic gold text. Put it on an element whose own inline style does not set
+   `background` (the shorthand would wipe the gradient and leave text transparent). */
+@layer utilities {
+  .text-gold-metal {
+    color: var(--gold-text-fallback);
+  }
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    .text-gold-metal {
+      background-image: var(--gold-text);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+  /* Solid gold for SVG icons (gradient text doesn't apply to strokes) */
+  .text-gold-icon {
+    color: var(--gold-text-fallback);
+  }
+}
+
+/* Light (cream) section surface: ink text, and a deeper gold gradient so gold
+   text keeps contrast on the pale background. */
+.surface-light {
+  background: var(--cream);
+  color: var(--ink);
+  --gold-text: linear-gradient(135deg, #B8903E 0%, #8A6A1E 100%);
+  --gold-text-fallback: #8A6A1E;
 }
 
 /* Shimmer keyframe */
@@ -184,27 +195,6 @@ body {
   z-index: 0;
 }
 
-/* Gradient border trick */
-.gradient-border {
-  position: relative;
-  background: #030308;
-}
-.gradient-border::before {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  background: linear-gradient(135deg, #7040c0, #00e5ff, #c9a54e);
-  background-size: 200% 200%;
-  animation: shimmer 3s linear infinite;
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.gradient-border:hover::before {
-  opacity: 1;
-}
-
 /* 3D tilt card */
 .tilt-card {
   transform-style: preserve-3d;
@@ -220,7 +210,7 @@ body {
 .ripple {
   position: absolute;
   border-radius: 50%;
-  background: rgba(0, 229, 255, 0.3);
+  background: rgba(184, 144, 62, 0.3);
   animation: ripple 0.6s linear;
   pointer-events: none;
 }
@@ -278,12 +268,12 @@ section {
   position: absolute;
   left: 0;
   right: 0;
-  height: 3px;
+  height: 2px;
   top: -6%;
   opacity: 0;
   pointer-events: none;
-  background: linear-gradient(90deg, transparent, #00e5ff, #a0f4ff, #00e5ff, transparent);
-  box-shadow: 0 0 18px 4px rgba(0, 229, 255, 0.65);
+  background: linear-gradient(90deg, transparent, #B8903E, transparent);
+  box-shadow: 0 0 14px 2px rgba(184, 144, 62, 0.4);
   z-index: 5;
 }
 
@@ -316,12 +306,6 @@ section {
 }
 .vinyl-record:hover .vinyl-disc {
   animation-duration: 2s;
-}
-
-/* Glow pulse for about section rings */
-@keyframes glowPulse {
-  0%, 100% { box-shadow: 0 0 20px rgba(0, 229, 255, 0.3), 0 0 60px rgba(0, 229, 255, 0.1); }
-  50% { box-shadow: 0 0 40px rgba(0, 229, 255, 0.6), 0 0 100px rgba(0, 229, 255, 0.2); }
 }
 
 /* Reduced motion */

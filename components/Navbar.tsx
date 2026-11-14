@@ -15,7 +15,7 @@ export default function Navbar() {
   const navBg = useTransform(
     scrollY,
     [0, 80],
-    ["rgba(3,3,8,0)", "rgba(3,3,8,0.85)"]
+    ["rgba(3,3,8,0)", "rgba(3,3,8,0.97)"] // near-opaque so it stays dark over cream sections
   );
 
   useEffect(() => {
@@ -70,12 +70,7 @@ export default function Navbar() {
         >
           <span
             className="text-xl font-black tracking-tighter"
-            style={{
-              background: "linear-gradient(135deg, #c8d0e0, #c9a54e, #00e5ff)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
+            style={{ color: "#ffffff" }}
           >
             Om Raut
           </span>
@@ -90,7 +85,7 @@ export default function Navbar() {
               className={`relative px-4 py-2 text-sm font-medium rounded-full transition-colors duration-200 ${
                 activeSection === id
                   ? "text-white"
-                  : "text-white/50 hover:text-gold"
+                  : "text-white/50 hover:text-gold-metal"
               }`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -100,9 +95,8 @@ export default function Navbar() {
                   layoutId="nav-pill"
                   className="absolute inset-0 rounded-full"
                   style={{
-                    background:
-                      "linear-gradient(135deg, rgba(112,64,192,0.18), rgba(0,229,255,0.18))",
-                    border: "1px solid rgba(0,229,255,0.35)",
+                    background: "rgba(255,255,255,0.06)",
+                    border: "1px solid rgba(255,255,255,0.14)",
                   }}
                   transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 />
@@ -117,18 +111,18 @@ export default function Navbar() {
         {/* CTA */}
         <motion.button
           onClick={() => scrollTo("contact")}
-          className="hidden md:flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-white"
+          className="hidden md:flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold"
           style={{
-            background: "linear-gradient(135deg, #7040c0, #00e5ff)",
-            boxShadow: "0 0 20px rgba(0,229,255,0.3)",
+            background: "rgba(184,144,62,0)",
+            border: "1px solid #B8903E",
           }}
           whileHover={{
             scale: 1.05,
-            boxShadow: "0 0 30px rgba(0,229,255,0.5)",
+            backgroundColor: "rgba(184,144,62,0.12)",
           }}
           whileTap={{ scale: 0.95 }}
         >
-          Hire Me
+          <span className="text-gold-metal">Hire Me</span>
         </motion.button>
 
         {/* Mobile hamburger */}
@@ -172,7 +166,7 @@ export default function Navbar() {
               key={id}
               onClick={() => scrollTo(id)}
               className={`text-left py-2 text-base font-medium transition-colors ${
-                activeSection === id ? "text-[#00e5ff]" : "text-white/60"
+                activeSection === id ? "text-gold-metal" : "text-white/60"
               }`}
             >
               {labels[i]}

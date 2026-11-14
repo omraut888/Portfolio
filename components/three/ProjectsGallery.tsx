@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { CountUp, ScrollSlide } from "../Reveal";
 
 interface Metric { value: string; label: string }
 
@@ -9,7 +10,6 @@ interface Project {
   id: string;
   title: string;
   tagline: string;
-  color: string;
   status: string;
   /** Public repo URL. Omit for private / unreleased projects. */
   repo?: string;
@@ -28,7 +28,6 @@ const PROJECTS: Project[] = [
     id: "meridian",
     title: "MERIDIAN",
     tagline: "Hybrid RAG pipeline built for production-grade retrieval",
-    color: "#00e5ff",
     status: "Public · PolyForm Strict license",
     repo: "https://github.com/omraut888/meridian",
     metrics: [
@@ -48,7 +47,6 @@ const PROJECTS: Project[] = [
     id: "umbra",
     title: "UMBRA",
     tagline: "RAG coverage diagnostics — finds what a knowledge base can't answer, before users do",
-    color: "#7040c0",
     status: "Public",
     repo: "https://github.com/omraut888/umbra",
     metrics: [
@@ -68,7 +66,6 @@ const PROJECTS: Project[] = [
     id: "invariant",
     title: "INVARIANT",
     tagline: "Autonomous quant research pipeline — causal signal discovery to portfolio construction",
-    color: "#c9a54e",
     status: "Planned — next build",
     metrics: [
       { value: "Decay", label: "Validation" },
@@ -85,7 +82,6 @@ const PROJECTS: Project[] = [
     id: "sentinel-x",
     title: "SENTINEL-X",
     tagline: "A cross-modal AI system that flags when a company's own earnings-call statements and its SEC filings quietly contradict each other, and checks its stated guidance against what the real financial data actually supports.",
-    color: "#2563eb",
     status: "Private · Repo release pending",
     metrics: [
       { value: "0.92", label: "F1 Score · from 0.44" },
@@ -101,6 +97,9 @@ const PROJECTS: Project[] = [
     },
   },
 ];
+
+/** Single site accent — every project shares the same treatment. */
+const ACCENT = "#B8903E"; // borders / fills; gold text uses .text-gold-metal
 
 const PANEL_EASE = [0.4, 0, 0.2, 1] as [number, number, number, number];
 
@@ -138,20 +137,11 @@ function ProjectCard({
   onToggle: () => void;
 }) {
   const [hover, setHover] = useState(false);
-  const num = String(index + 1).padStart(2, "0");
   const hasDetail = !!project.detail;
   const active = hasDetail && (hover || isExpanded);
 
   return (
-    <motion.div
-      // Start visible so the project rows are never left blank in Chrome if
-      // whileInView fails to fire (this section's content otherwise vanishes).
-      initial={{ opacity: 1, y: 0 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0, margin: "0px 0px -10px 0px" }}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}
-    >
+    <ScrollSlide index={index} style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
       {/* ── Row header (click anywhere to toggle) ── */}
       <div
         onClick={hasDetail ? onToggle : undefined}
@@ -162,36 +152,21 @@ function ProjectCard({
           position: "relative",
           cursor: hasDetail ? "pointer" : "default",
           padding: "clamp(24px, 3.5vw, 44px) clamp(14px, 2.5vw, 36px)",
-          borderLeft: `3px solid ${active ? project.color : "transparent"}`,
+          borderLeft: `3px solid ${active ? ACCENT : "transparent"}`,
           background: active ? "rgba(255,255,255,0.025)" : "transparent",
           transition: "background 0.4s, border-color 0.4s",
         }}
       >
-        <span
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: "clamp(40px, 6vw, 88px)",
-            fontWeight: 400,
-            lineHeight: 1,
-            color: "#ffffff",
-            opacity: 0.08,
-            flexShrink: 0,
-          }}
-        >
-          {num}
-        </span>
-
         <div style={{ flex: "1 1 auto", minWidth: 0 }}>
           <div
+            className={active ? "text-gold-metal" : undefined}
             style={{
               fontFamily: "var(--font-display)",
               fontSize: "clamp(32px, 4vw, 52px)",
               fontWeight: 400,
               lineHeight: 1.05,
               letterSpacing: "-0.01em",
-              color: active ? project.color : "#ffffff",
-              textShadow: active ? `0 0 40px ${project.color}70` : "none",
-              transition: "color 0.4s, text-shadow 0.4s",
+              color: "#ffffff",
             }}
           >
             {project.title}
@@ -207,14 +182,15 @@ function ProjectCard({
           </div>
           {project.metrics.map((m) => (
             <div key={m.label} style={{ fontSize: 13, color: "rgba(255,255,255,0.5)", fontFamily: "var(--font-mono)", whiteSpace: "nowrap" }}>
-              <span style={{ color: project.color, fontWeight: 600 }}>{m.value}</span> {m.label}
+              <span className="text-gold-metal" style={{ fontWeight: 600 }}><CountUp value={m.value} /></span> {m.label}
             </div>
           ))}
           <div
+            className={active ? "text-gold-metal" : undefined}
             style={{
               marginTop: 8,
               fontSize: 12,
-              color: active ? project.color : "rgba(255,255,255,0.3)",
+              color: "rgba(255,255,255,0.3)",
               fontFamily: "var(--font-mono)",
               transition: "color 0.3s",
             }}
@@ -243,7 +219,7 @@ function ProjectCard({
                 margin: "0 clamp(8px, 2vw, 28px) 28px",
                 padding: "clamp(28px, 3vw, 44px)",
                 background: "rgba(8,8,12,0.8)",
-                borderLeft: `3px solid ${project.color}`,
+                borderLeft: `3px solid ${ACCENT}`,
                 borderRadius: 14,
               }}
             >
@@ -259,14 +235,14 @@ function ProjectCard({
                 <div className="flex flex-col gap-10">
                   {/* Key metrics — large numbers, no badges */}
                   <div>
-                    <div style={{ fontSize: 10, fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "0.16em", color: project.color, marginBottom: 18 }}>
+                    <div style={{ fontSize: 10, fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "0.16em", marginBottom: 18 }} className="text-gold-metal">
                       Key Metrics
                     </div>
                     <div className="flex flex-wrap gap-x-12 gap-y-8">
                       {project.metrics.map((m) => (
                         <div key={m.label}>
-                          <div style={{ fontFamily: "var(--font-display)", fontSize: 48, fontWeight: 400, lineHeight: 1, color: project.color }}>
-                            {m.value}
+                          <div className="text-gold-metal" style={{ fontFamily: "var(--font-display)", fontSize: 48, fontWeight: 400, lineHeight: 1 }}>
+                            <CountUp value={m.value} />
                           </div>
                           <div style={{ fontSize: 11, fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "0.12em", color: "rgba(255,255,255,0.45)", marginTop: 6 }}>
                             {m.label}
@@ -278,7 +254,7 @@ function ProjectCard({
 
                   {/* Tech stack — simple pills */}
                   <div>
-                    <div style={{ fontSize: 10, fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "0.16em", color: project.color, marginBottom: 14 }}>
+                    <div style={{ fontSize: 10, fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "0.16em", marginBottom: 14 }} className="text-gold-metal">
                       Tech Stack
                     </div>
                     <div className="flex flex-wrap gap-2">
@@ -313,16 +289,15 @@ function ProjectCard({
                           fontFamily: "var(--font-mono)",
                           fontSize: 12,
                           fontWeight: 600,
-                          color: project.color,
                           background: "transparent",
-                          border: `1px solid ${project.color}`,
+                          border: `1px solid ${ACCENT}`,
                           borderRadius: 999,
                           padding: "8px 18px",
                           letterSpacing: "0.03em",
                           textDecoration: "none",
                         }}
                       >
-                        GitHub ↗
+                        <span className="text-gold-metal">GitHub ↗</span>
                       </a>
                     )}
                     <button
@@ -331,16 +306,15 @@ function ProjectCard({
                         fontFamily: "var(--font-mono)",
                         fontSize: 12,
                         fontWeight: 600,
-                        color: project.color,
                         background: "transparent",
-                        border: `1px solid ${project.color}`,
+                        border: `1px solid ${ACCENT}`,
                         borderRadius: 999,
                         padding: "8px 18px",
                         cursor: "pointer",
                         letterSpacing: "0.03em",
                       }}
                     >
-                      ← Collapse
+                      <span className="text-gold-metal">← Collapse</span>
                     </button>
                   </div>
                 </div>
@@ -349,7 +323,7 @@ function ProjectCard({
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </ScrollSlide>
   );
 }
 

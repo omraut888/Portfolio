@@ -82,10 +82,11 @@ export default function CustomCursor() {
           width: isHovering ? 8 : 6,
           height: isHovering ? 8 : 6,
           borderRadius: "50%",
-          backgroundColor: "#00e5ff",
+          backgroundColor: "#ffffff",
+          // Invert against what's underneath so it stays visible on cream sections
+          mixBlendMode: "difference",
           transform: "translate(-50%, -50%)",
           transition: "width 0.2s, height 0.2s",
-          boxShadow: "0 0 8px rgba(0,229,255,0.85), 0 0 16px rgba(0,229,255,0.5)",
         }}
       />
       {/* Ring */}
@@ -96,11 +97,12 @@ export default function CustomCursor() {
           width: isClicking ? 28 : isHovering ? 40 : 32,
           height: isClicking ? 28 : isHovering ? 40 : 32,
           borderRadius: "50%",
-          border: `1.5px solid ${isHovering ? "rgba(240,192,96,0.85)" : "rgba(0,229,255,0.45)"}`,
+          border: `1.5px solid ${isHovering ? "rgba(184,144,62,0.85)" : "rgba(255,255,255,0.35)"}`,
           transform: "translate(-50%, -50%)",
           transition:
             "width 0.3s cubic-bezier(0.23,1,0.32,1), height 0.3s cubic-bezier(0.23,1,0.32,1), border-color 0.3s",
           backdropFilter: isHovering ? "blur(2px)" : "none",
+          mixBlendMode: isHovering ? "normal" : "difference",
         }}
       />
     </>

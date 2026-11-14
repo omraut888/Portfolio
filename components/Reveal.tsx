@@ -1,7 +1,16 @@
 "use client";
 
-import { motion, MotionConfig } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
+import {
+  animate,
+  motion,
+  transform,
+  useInView,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 
 const CURTAIN = [0.76, 0, 0.24, 1] as [number, number, number, number];
 const RISE = [0.22, 1, 0.36, 1] as [number, number, number, number];
@@ -103,21 +112,128 @@ export function LineDraw({
 }
 
 /**
- * Section-level scroll reveal: fade + 20px slide-up the first time the section
- * enters the viewport. Fires once. With prefers-reduced-motion the slide is
- * dropped and only the fade remains.
+ * Opacity is derived through a JS function on purpose: framer-motion hands a
+ * plain `useTransform(scrollYProgress, …)` opacity to the browser's native
+ * ScrollTimeline, which ignores `target`/`offset` and tracks whole-page scroll.
+ * A function transform keeps it bound to the element's own scroll range.
  */
-export function SectionReveal({ children }: { children: ReactNode }) {
+export const scrubOpacity = (input: number[], output: number[]) => (v: number) =>
+  transform(v, input, output);
+
+/**
+ * Scroll-scrubbed headline: scales 0.85 → 1 and fades 0 → 1 as the block's top
+ * travels from 80% to 30% of the viewport. Tied to scroll position, so it
+ * reverses when scrolling back up. Reduced motion: opacity only.
+ */
+export function ScrollScale({
+  children,
+  className,
+  style,
+}: {
+  children: ReactNode;
+  className?: string;
+  style?: CSSProperties;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.8", "start 0.3"] });
+  const opacity = useTransform(scrollYProgress, scrubOpacity([0, 1], [0, 1]));
+  const scale = useTransform(scrollYProgress, [0, 1], [reduce ? 1 : 0.85, 1]);
   return (
-    <MotionConfig reducedMotion="user">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.05 }}
-        transition={{ duration: 0.8, ease: RISE }}
-      >
-        {children}
-      </motion.div>
-    </MotionConfig>
+    <motion.div ref={ref} className={className} style={{ ...style, opacity, scale }}>
+      {children}
+    </motion.div>
   );
+}
+
+/**
+ * Scroll-scrubbed list item (project rows, experience cards): slides in 40px
+ * from the left (odd rows) or right (even rows) while scaling 0.85 → 1 and
+ * fading in. Uses a slightly earlier window than headlines so a card is fully
+ * settled before it reaches mid-screen. Reduced motion: opacity only.
+ */
+export function ScrollSlide({
+  children,
+  index,
+  className,
+  style,
+}: {
+  children: ReactNode;
+  /** 0-based position; even index = odd row (from left), odd index = even row (from right). */
+  index: number;
+  className?: string;
+  style?: CSSProperties;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.95", "start 0.55"] });
+  const from = index % 2 === 0 ? -40 : 40;
+  const opacity = useTransform(scrollYProgress, scrubOpacity([0, 1], [0, 1]));
+  const scale = useTransform(scrollYProgress, [0, 1], [reduce ? 1 : 0.85, 1]);
+  const x = useTransform(scrollYProgress, [0, 1], [reduce ? 0 : from, 0]);
+  return (
+    <motion.div ref={ref} className={className} style={{ ...style, opacity, scale, x }}>
+      {children}
+    </motion.div>
+  );
+}
+
+/**
+ * Counts the first number in `value` up from 0 when it scrolls into view
+ * (once, ~1.2s), keeping any prefix/suffix and the original decimals and
+ * thousands separators — e.g. "96.7%", "+15%", "3,700", "8.2 / 10".
+ * Non-numeric values render as-is. The server render shows the final value,
+ * so the real number is never lost if JS is slow; reduced motion skips the climb.
+ */
+export function CountUp({ value, duration = 1.2 }: { value: string; duration?: number }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const reduce = useReducedMotion();
+  const inView = useInView(ref, { once: true, amount: 0.6 });
+  const match = value.match(/\d[\d,]*(?:\.\d+)?/);
+  const [display, setDisplay] = useState(value);
+  const armed = useRef(false);
+
+  const parts = match
+    ? {
+        pre: value.slice(0, match.index),
+        post: value.slice((match.index ?? 0) + match[0].length),
+        target: parseFloat(match[0].replace(/,/g, "")),
+        decimals: (match[0].split(".")[1] ?? "").length,
+        commas: match[0].includes(","),
+      }
+    : null;
+
+  const fmt = (n: number) => {
+    if (!parts) return value;
+    const num = parts.commas
+      ? n.toLocaleString("en-US", { minimumFractionDigits: parts.decimals, maximumFractionDigits: parts.decimals })
+      : n.toFixed(parts.decimals);
+    return parts.pre + num + parts.post;
+  };
+
+  // Arm on mount: drop to 0 while still off-screen so the climb is visible.
+  useEffect(() => {
+    if (!parts || reduce || armed.current || inView) return;
+    armed.current = true;
+    setDisplay(fmt(0));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reduce]);
+
+  useEffect(() => {
+    if (!parts || !inView) return;
+    if (reduce || !armed.current) {
+      setDisplay(value);
+      return;
+    }
+    const controls = animate(0, parts.target, {
+      duration,
+      ease: [0.22, 1, 0.36, 1],
+      onUpdate: (n) => setDisplay(fmt(n)),
+      onComplete: () => setDisplay(value),
+    });
+    return () => controls.stop();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inView, reduce, value]);
+
+  return <span ref={ref}>{display}</span>;
 }

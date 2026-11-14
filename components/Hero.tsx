@@ -1,13 +1,12 @@
 "use client";
 
-import { useCallback } from "react";
-import { motion } from "framer-motion";
+import { useCallback, useRef } from "react";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import dynamic from "next/dynamic";
 import type { Variants } from "framer-motion";
 import { useTypewriter } from "@/hooks/useTypewriter";
 import { useMagneticHover } from "@/hooks/useMagneticHover";
-
-const HeroCanvas = dynamic(() => import("./three/HeroCanvas"), { ssr: false });
+import { scrubOpacity } from "./Reveal";
 
 const ROLES = [
   "AI Engineer",
@@ -31,6 +30,8 @@ function addRipple(e: React.MouseEvent<HTMLButtonElement>) {
   btn.appendChild(ripple);
   setTimeout(() => ripple.remove(), 700);
 }
+
+const HeroCanvas = dynamic(() => import("./three/HeroCanvas"), { ssr: false });
 
 const EASE_OUT = [0.22, 1, 0.36, 1] as [number, number, number, number];
 
@@ -60,37 +61,22 @@ export default function Hero() {
 
   const nameLetters = "Om Raut".split("");
 
+  // Name grows and dissolves as the hero scrolls away (scrubbed to scroll).
+  const heroRef = useRef<HTMLElement>(null);
+  const reduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const nameScale = useTransform(scrollYProgress, [0, 1], [1, reduceMotion ? 1 : 1.15]);
+  const nameOpacity = useTransform(scrollYProgress, scrubOpacity([0, 0.85], [1, 0]));
+
   return (
     <section
       id="hero"
+      ref={heroRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-transparent"
     >
       {/* 3D particle sphere — full-bleed background, centered behind text */}
       <HeroCanvas />
 
-      {/* Radial gradients */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 80% 60% at 50% 40%, rgba(0,229,255,0.06) 0%, transparent 70%)",
-        }}
-      />
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 60% 40% at 30% 60%, rgba(112,64,192,0.05) 0%, transparent 60%)",
-        }}
-      />
-      {/* Dark vignette behind text for readability */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 65% 55% at 50% 44%, rgba(0,0,0,0.62) 0%, transparent 68%)",
-        }}
-      />
       {/* Content — centered over the sphere */}
       <motion.div
         variants={containerVariants}
@@ -99,7 +85,10 @@ export default function Hero() {
         className="relative z-10 text-center px-6 max-w-5xl mx-auto"
       >
         {/* Name — HUGE, letter by letter */}
-        <div className="flex items-center justify-center flex-wrap">
+        <motion.div
+          className="flex items-center justify-center flex-wrap"
+          style={{ scale: nameScale, opacity: nameOpacity }}
+        >
           {nameLetters.map((char, i) => (
             <motion.span
               key={i}
@@ -126,19 +115,19 @@ export default function Hero() {
               {char === " " ? " " : char}
             </motion.span>
           ))}
-        </div>
+        </motion.div>
 
         {/* Typewriter — massive hollow / outline text */}
-        <motion.div variants={fadeUp} className="flex items-center justify-center mt-1 mb-8">
+        <motion.div variants={fadeUp} className="flex items-center justify-center mt-4 mb-8">
           <div
-            className="font-display tracking-tight"
+            className="text-gold-metal"
             style={{
-              fontSize: "clamp(52px, 10vw, 116px)",
-              fontWeight: 300,
-              lineHeight: 1.05,
-              minHeight: "1.05em",
-              color: "#00e5ff",
-              letterSpacing: "-0.02em",
+              fontFamily: "var(--font-body)",
+              fontSize: "clamp(20px, 2.4vw, 30px)",
+              fontWeight: 500,
+              lineHeight: 1.3,
+              minHeight: "1.3em",
+              letterSpacing: "0.01em",
             }}
           >
             {displayText}
@@ -146,19 +135,19 @@ export default function Hero() {
               className="inline-block ml-1 align-middle animate-[cursorBlink_1s_step-end_infinite]"
               style={{
                 width: 3,
-                height: "0.7em",
-                background: "#00e5ff",
+                height: "0.9em",
+                background: "var(--gold)",
                 verticalAlign: "middle",
               }}
             />
           </div>
         </motion.div>
 
-        {/* Available — subtle green dot */}
+        {/* Available — subtle status dot */}
         <motion.div variants={fadeUp} className="flex items-center justify-center gap-2.5 mb-8">
           <span className="relative flex h-2.5 w-2.5">
-            <span className="absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-70 animate-ping" />
-            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-400" />
+            <span className="absolute inline-flex h-full w-full rounded-full bg-gold opacity-60 animate-ping" />
+            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-gold" />
           </span>
           <span className="text-white/55 text-sm font-mono tracking-wide">Available</span>
         </motion.div>
@@ -180,23 +169,24 @@ export default function Hero() {
             onMouseMove={primaryBtn.onMouseMove}
             onMouseLeave={() => {
               primaryBtn.onMouseLeave();
+              const btn = primaryBtn.ref.current;
+              if (btn) btn.style.background = "transparent";
             }}
             onClick={(e) => {
               addRipple(e);
               scrollTo("projects");
             }}
-            className="relative overflow-hidden px-8 py-3.5 rounded-full font-semibold text-white text-sm"
+            className="relative overflow-hidden px-8 py-3.5 rounded-full font-semibold text-sm"
             style={{
-              background: "linear-gradient(135deg, #7040c0, #00e5ff)",
-              boxShadow: "0 0 30px rgba(0,229,255,0.35), inset 0 1px 0 rgba(255,255,255,0.1)",
-              transition: "box-shadow 0.3s",
+              background: "transparent",
+              border: "1px solid var(--gold)",
+              transition: "background 0.3s",
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.boxShadow =
-                "0 0 50px rgba(0,229,255,0.6), inset 0 1px 0 rgba(255,255,255,0.1)";
+              (e.currentTarget as HTMLButtonElement).style.background = "rgba(184,144,62,0.12)";
             }}
           >
-            View My Work
+            <span className="text-gold-metal">View My Work</span>
           </button>
 
           <button
@@ -223,7 +213,7 @@ export default function Hero() {
             }}
             onMouseEnter={(e) => {
               (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.08)";
-              (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(0,229,255,0.5)";
+              (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(184,144,62,0.5)";
             }}
           >
             Contact Me
@@ -240,7 +230,7 @@ export default function Hero() {
               className="absolute top-0 left-0 w-full"
               style={{
                 height: "50%",
-                background: "linear-gradient(180deg, #00e5ff, transparent)",
+                background: "linear-gradient(180deg, var(--gold), transparent)",
               }}
               animate={{ y: ["0%", "200%"] }}
               transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}

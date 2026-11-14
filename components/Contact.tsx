@@ -3,14 +3,13 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { useMagneticHover } from "@/hooks/useMagneticHover";
-import { WordReveal } from "./Reveal";
+import { WordReveal, ScrollScale } from "./Reveal";
 
 const links = [
   {
     label: "Email",
     value: "raut.om@northeastern.edu",
     href: "mailto:raut.om@northeastern.edu",
-    color: "#00e5ff",
     icon: (
       <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
         <path
@@ -35,7 +34,6 @@ const links = [
     label: "Phone",
     value: "(617) 794-3580",
     href: "tel:+16177943580",
-    color: "#2563eb",
     icon: (
       <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
         <path
@@ -53,7 +51,6 @@ const links = [
     label: "LinkedIn",
     value: "linkedin.com/in/omraut88",
     href: "https://www.linkedin.com/in/omraut88/",
-    color: "#7040c0",
     icon: (
       <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
         <path
@@ -80,7 +77,6 @@ const links = [
     label: "GitHub",
     value: "github.com/omraut888",
     href: "https://github.com/omraut888",
-    color: "#00e5ff",
     icon: (
       <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
         <path
@@ -95,59 +91,6 @@ const links = [
     copyable: false,
   },
 ];
-
-function OrbBackground() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const rafRef = useRef<number>(0);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-
-    // Blue / violet only
-    const orbs = Array.from({ length: 5 }, (_, i) => ({
-      x: canvas.width * (0.2 + i * 0.15),
-      y: canvas.height * (0.3 + Math.sin(i) * 0.3),
-      r: 80 + i * 30,
-      color: i % 2 === 0 ? "rgba(37,99,235," : "rgba(112,64,192,",
-      speed: 0.003 + i * 0.001,
-      offset: i * 1.2,
-    }));
-
-    let t = 0;
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      orbs.forEach((orb) => {
-        const x = orb.x + Math.sin(t * orb.speed + orb.offset) * 40;
-        const y = orb.y + Math.cos(t * orb.speed * 0.7 + orb.offset) * 30;
-        const grad = ctx.createRadialGradient(x, y, 0, x, y, orb.r);
-        grad.addColorStop(0, `${orb.color}0.12)`);
-        grad.addColorStop(1, `${orb.color}0)`);
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(x, y, orb.r, 0, Math.PI * 2);
-        ctx.fill();
-      });
-      t += 1;
-      rafRef.current = requestAnimationFrame(animate);
-    };
-    animate();
-
-    return () => cancelAnimationFrame(rafRef.current);
-  }, []);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 w-full h-full opacity-60"
-    />
-  );
-}
 
 const TERMINAL_LINES = [
   { cmd: "status",   out: "Open to full-time AI/ML roles"          },
@@ -180,7 +123,7 @@ function ContactTerminal() {
       className="rounded-xl overflow-hidden w-full h-full"
       style={{
         background: "rgba(5,5,10,0.95)",
-        border: "1px solid rgba(37,99,235,0.2)",
+        border: "1px solid rgba(255,255,255,0.1)",
         fontFamily: "var(--font-mono)",
         boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
       }}
@@ -190,9 +133,9 @@ function ContactTerminal() {
         className="flex items-center gap-1.5 px-3 py-2.5"
         style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
       >
-        <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#ff5f56" }} />
-        <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#ffbd2e" }} />
-        <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#27c93f" }} />
+        <span className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(255,255,255,0.18)" }} />
+        <span className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(255,255,255,0.18)" }} />
+        <span className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(255,255,255,0.18)" }} />
         <span className="ml-2 text-white/30 text-[10px]">contact.sh</span>
       </div>
 
@@ -205,8 +148,8 @@ function ContactTerminal() {
             transition={{ duration: 0.25 }}
           >
             <div>
-              <span style={{ color: "#2563eb" }}>$ </span>
-              <span style={{ color: "#00e5ff" }}>{line.cmd}</span>
+              <span className="text-gold-metal">$ </span>
+              <span style={{ color: "rgba(255,255,255,0.85)" }}>{line.cmd}</span>
             </div>
             <div style={{ color: "rgba(255,255,255,0.6)", paddingLeft: "1em", marginTop: 2 }}>
               → {line.out}
@@ -215,10 +158,10 @@ function ContactTerminal() {
         ))}
         {visibleLines < TERMINAL_LINES.length && (
           <div>
-            <span style={{ color: "#2563eb" }}>$ </span>
+            <span className="text-gold-metal">$ </span>
             <span
               className="inline-block w-1.5 h-3.5 align-middle animate-[cursorBlink_1s_step-end_infinite]"
-              style={{ background: "#00e5ff" }}
+              style={{ background: "var(--gold)" }}
             />
           </div>
         )}
@@ -261,18 +204,16 @@ function ContactLink({ link }: { link: (typeof links)[0] }) {
       }}
       whileHover={{
         scale: 1.02,
-        borderColor: `${link.color}40`,
-        backgroundColor: `${link.color}08` as never,
-        boxShadow: `0 10px 30px ${link.color}15`,
+        borderColor: "rgba(184,144,62,0.35)",
       }}
     >
       {/* Icon */}
       <div
         className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300"
         style={{
-          background: `${link.color}15`,
-          color: link.color,
-          border: `1px solid ${link.color}25`,
+          background: "rgba(255,255,255,0.04)",
+          color: "rgba(255,255,255,0.75)",
+          border: "1px solid rgba(255,255,255,0.1)",
         }}
       >
         {link.icon}
@@ -281,7 +222,7 @@ function ContactLink({ link }: { link: (typeof links)[0] }) {
       {/* Text */}
       <div className="flex-1 min-w-0">
         <div className="text-white/40 text-xs mb-0.5">{link.label}</div>
-        <div className="text-white font-medium text-sm truncate transition-colors duration-300 group-hover:text-gold">{link.value}</div>
+        <div className="text-white font-medium text-sm truncate transition-colors duration-300 group-hover:text-gold-metal">{link.value}</div>
       </div>
 
       {/* Copy indicator */}
@@ -293,12 +234,11 @@ function ContactLink({ link }: { link: (typeof links)[0] }) {
             exit={{ scale: 0, opacity: 0 }}
             className="px-3 py-1 rounded-full text-xs font-semibold"
             style={{
-              background: `${link.color}20`,
-              color: link.color,
-              border: `1px solid ${link.color}30`,
+              background: "rgba(184,144,62,0.1)",
+              border: "1px solid rgba(184,144,62,0.3)",
             }}
           >
-            Copied!
+            <span className="text-gold-metal">Copied!</span>
           </motion.div>
         )}
       </AnimatePresence>
@@ -306,7 +246,7 @@ function ContactLink({ link }: { link: (typeof links)[0] }) {
       {/* Arrow / copy glyph */}
       {!link.copyable ? (
         <svg
-          className="w-4 h-4 text-white/20 group-hover:text-gold transition-colors flex-shrink-0"
+          className="w-4 h-4 text-white/20 group-hover:text-gold-icon transition-colors flex-shrink-0"
           fill="none"
           viewBox="0 0 24 24"
         >
@@ -320,7 +260,7 @@ function ContactLink({ link }: { link: (typeof links)[0] }) {
         </svg>
       ) : (
         <svg
-          className="w-4 h-4 text-white/20 group-hover:text-gold transition-colors flex-shrink-0"
+          className="w-4 h-4 text-white/20 group-hover:text-gold-icon transition-colors flex-shrink-0"
           fill="none"
           viewBox="0 0 24 24"
         >
@@ -343,17 +283,6 @@ export default function Contact() {
       className="relative z-10 py-24 overflow-hidden flex items-center"
       style={{ background: "rgba(5,5,8,0.82)" }}
     >
-      <OrbBackground />
-
-      {/* Blue/violet vignette */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 80% 60% at 50% 50%, rgba(37,99,235,0.05) 0%, transparent 70%)",
-        }}
-      />
-
       <div className="max-w-6xl mx-auto px-6 relative z-10 w-full">
         {/* Section eyebrow */}
         <motion.p
@@ -362,9 +291,8 @@ export default function Contact() {
           viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 0.6 }}
           className="text-base font-semibold tracking-widest uppercase mb-10 text-center"
-          style={{ color: "#00e5ff" }}
         >
-          Get In Touch
+          <span className="text-gold-metal">Get In Touch</span>
         </motion.p>
 
         <div className="grid lg:grid-cols-[3fr_2fr] gap-8 items-stretch">
@@ -375,11 +303,11 @@ export default function Contact() {
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.7 }}
           >
-            {/* Heading with green pulsing dot */}
-            <div className="flex items-center gap-3 mb-3">
+            {/* Heading with pulsing status dot */}
+            <ScrollScale className="flex items-center gap-3 mb-3" style={{ transformOrigin: "left center" }}>
               <span className="relative flex h-3 w-3 flex-shrink-0">
-                <span className="absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-70 animate-ping" />
-                <span className="relative inline-flex h-3 w-3 rounded-full bg-green-400" />
+                <span className="absolute inline-flex h-full w-full rounded-full bg-gold opacity-60 animate-ping" />
+                <span className="relative inline-flex h-3 w-3 rounded-full bg-gold" />
               </span>
               <h2
                 style={{
@@ -394,7 +322,7 @@ export default function Contact() {
               >
                 <WordReveal text="Open to Work" />
               </h2>
-            </div>
+            </ScrollScale>
 
             {/* Subtitle */}
             <p className="text-white/50 text-base md:text-lg mb-8">
@@ -424,11 +352,11 @@ export default function Contact() {
               transition={{ delay: 0.35 }}
               className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full"
               style={{
-                background: "rgba(37,99,235,0.1)",
-                border: "1px solid rgba(37,99,235,0.3)",
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(255,255,255,0.12)",
               }}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
               <span className="text-white/75 text-xs font-mono tracking-wide">
                 Available Dec 2026 · F-1 OPT
               </span>
@@ -458,7 +386,7 @@ export default function Contact() {
         >
           <p className="text-white/25 text-sm font-mono">
             Designed &amp; Built by{" "}
-            <span className="text-[#00e5ff]/70">Om Raut</span> · 2026
+            <span className="text-white/60">Om Raut</span> · 2026
           </p>
           <p className="text-white/15 text-xs mt-2">
             Built with Next.js · Framer Motion · Three.js

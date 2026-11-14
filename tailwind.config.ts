@@ -11,10 +11,9 @@ const config: Config = {
       colors: {
         background: "#030308",
         foreground: "#ffffff",
-        "electric-blue": "#00e5ff",
-        "midnight-navy": "#060318",
-        "deep-purple": "#7040c0",
-        gold: "#c9a54e",
+        gold: "#B8903E",
+        ink: "#1A1816",
+        cream: "#F5F0E6",
       },
       fontFamily: {
         sans: ["var(--font-body)", "system-ui", "sans-serif"],
@@ -29,7 +28,6 @@ const config: Config = {
         "float-delay": "float 6s ease-in-out infinite 2s",
         "cursor-blink": "cursorBlink 1s step-end infinite",
         "spin-slow": "spin 20s linear infinite",
-        "glow-pulse": "glowPulse 2s ease-in-out infinite",
         "slide-up": "slideUp 0.6s ease forwards",
         "fade-in": "fadeIn 0.8s ease forwards",
         "draw-line": "drawLine 1.5s ease forwards",
@@ -55,10 +53,6 @@ const config: Config = {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0" },
         },
-        glowPulse: {
-          "0%, 100%": { boxShadow: "0 0 20px rgba(0,229,255,0.5)" },
-          "50%": { boxShadow: "0 0 40px rgba(0,229,255,0.9), 0 0 80px rgba(0,229,255,0.4)" },
-        },
         slideUp: {
           "0%": { opacity: "0", transform: "translateY(30px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
@@ -82,8 +76,6 @@ const config: Config = {
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "blue-purple": "linear-gradient(135deg, #00e5ff 0%, #7040c0 50%, #c060a0 100%)",
-        "dark-gradient": "linear-gradient(180deg, #030308 0%, #060318 50%, #030308 100%)",
       },
     },
   },

@@ -7,9 +7,9 @@ const R = 1.7;             // sphere radius (world units)
 const INTRO_MS = 2600;     // explode + reform duration
 const SCATTER = 20;        // world-space scatter reach (~3x viewport)
 
-// Neural Cosmos palette
-const GOLD = [240, 192, 96];    // #f0c060 — warm star core
-const VIOLET = [112, 64, 192];  // #7040c0 — nebula edge
+// Muted palette — near points warm toward the gold accent, far points fall to grey
+const GOLD = [201, 165, 78];    // #c9a54e — accent gold
+const GREY = [110, 110, 118];   // neutral grey for the far side
 
 interface Particle {
   // home = unit vector on the sphere surface (fibonacci distribution)
@@ -137,9 +137,9 @@ export default function HeroCanvas() {
 
         // depth 0 (far/edge) .. 1 (front/core) — colour + size/alpha
         const d = Math.max(0, Math.min(1, (z2 + R) / (2 * R)));
-        const cr = Math.round(VIOLET[0] + (GOLD[0] - VIOLET[0]) * d);
-        const cg = Math.round(VIOLET[1] + (GOLD[1] - VIOLET[1]) * d);
-        const cb = Math.round(VIOLET[2] + (GOLD[2] - VIOLET[2]) * d);
+        const cr = Math.round(GREY[0] + (GOLD[0] - GREY[0]) * d);
+        const cg = Math.round(GREY[1] + (GOLD[1] - GREY[1]) * d);
+        const cb = Math.round(GREY[2] + (GOLD[2] - GREY[2]) * d);
 
         const tw = 0.75 + 0.25 * Math.sin(time * 1.6 + p.twinkle);
         const r = Math.max(0.5, (0.7 + d * 1.6) * (5.0 / (z2 + 5.0)));
@@ -167,7 +167,7 @@ export default function HeroCanvas() {
     <canvas
       ref={canvasRef}
       className="absolute inset-0 w-full h-full"
-      style={{ opacity: 0.92, pointerEvents: "none" }}
+      style={{ opacity: 0.35, pointerEvents: "none" }}
     />
   );
 }

@@ -2,14 +2,14 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
-import { ClipReveal, LineDraw } from "./Reveal";
+import { Calendar, MapPin } from "lucide-react";
+import { CountUp, LineDraw, ScrollScale, ScrollSlide } from "./Reveal";
 
 interface ExperienceItem {
   company: string;
   role: string;
   date: string;
   location: string;
-  color: string;
   badge?: string;
   bullets: string[];
   stat: string;
@@ -22,7 +22,6 @@ const experiences: ExperienceItem[] = [
     role: "AI Developer Co-op",
     date: "Feb 2026 – Aug 2026",
     location: "Boston, MA",
-    color: "#00e5ff",
     bullets: [
       "Built production RAG pipeline: Voyage AI embeddings, hierarchical K-means/DBSCAN clustering over 10B+ vectors in Qdrant, MMR re-ranking via LangGraph + FastAPI",
       "Authored technical PRD for MCP-integrated multi-agent system using Gemini 2.0 Flash with dynamic tool-calling and context injection across agent boundaries",
@@ -36,7 +35,6 @@ const experiences: ExperienceItem[] = [
     role: "Data Science Intern",
     date: "Mar 2024 – Jun 2024",
     location: "Mumbai, India",
-    color: "#7040c0",
     badge: "Internship",
     bullets: [
       "Built predictive models for manufacturing using time-series and ensemble methods — improved forecast accuracy by 15% via cross-validation and feature selection",
@@ -51,7 +49,6 @@ const experiences: ExperienceItem[] = [
     role: "Data Analyst",
     date: "Jan 2024 – Mar 2024",
     location: "Mumbai, India",
-    color: "#c9a54e",
     badge: "Analyst",
     bullets: [
       "Built time-series and regression models to forecast demand — reduced stockouts by 15%",
@@ -82,16 +79,7 @@ function TimelineCard({
       } items-start`}
     >
       {/* Card */}
-      <motion.div
-        initial={{ opacity: 1, x: 0, y: 0 }}
-        animate={isInView ? { opacity: 1, x: 0, y: 0 } : {}}
-        transition={{
-          duration: 0.7,
-          ease: [0.22, 1, 0.36, 1],
-          delay: 0.1,
-        }}
-        className="flex-1 group"
-      >
+      <ScrollSlide index={index} className="flex-1 group">
         <div
           className="rounded-2xl p-6 transition-all duration-300"
           style={{
@@ -100,14 +88,12 @@ function TimelineCard({
             backdropFilter: "blur(10px)",
           }}
           onMouseEnter={(e) => {
-            (e.currentTarget as HTMLDivElement).style.borderColor = `${item.color}40`;
-            (e.currentTarget as HTMLDivElement).style.background = `${item.color}05`;
-            (e.currentTarget as HTMLDivElement).style.boxShadow = `0 0 30px ${item.color}15`;
+            (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(184,144,62,0.3)";
+            (e.currentTarget as HTMLDivElement).style.background = "rgba(255,255,255,0.04)";
           }}
           onMouseLeave={(e) => {
             (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(255,255,255,0.08)";
             (e.currentTarget as HTMLDivElement).style.background = "rgba(255,255,255,0.03)";
-            (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
           }}
         >
           {/* Header */}
@@ -120,9 +106,9 @@ function TimelineCard({
                 <span
                   className="text-xs font-semibold px-2.5 py-0.5 rounded-full"
                   style={{
-                    background: `${item.color}20`,
-                    color: item.color,
-                    border: `1px solid ${item.color}40`,
+                    background: "rgba(255,255,255,0.06)",
+                    color: "rgba(255,255,255,0.75)",
+                    border: "1px solid rgba(255,255,255,0.12)",
                   }}
                 >
                   {item.role}
@@ -148,17 +134,14 @@ function TimelineCard({
               transition={{ delay: 0.4, type: "spring", stiffness: 300 }}
               className="text-right"
               style={{
-                background: `linear-gradient(135deg, ${item.color}20, ${item.color}08)`,
-                border: `1px solid ${item.color}30`,
+                background: "rgba(255,255,255,0.03)",
+                border: "1px solid rgba(255,255,255,0.1)",
                 borderRadius: "12px",
                 padding: "8px 14px",
               }}
             >
-              <div
-                className="text-xl font-black"
-                style={{ color: item.color }}
-              >
-                {item.stat}
+              <div className="text-xl font-black text-gold-metal">
+                <CountUp value={item.stat} />
               </div>
               <div className="text-xs text-white/40 whitespace-nowrap">
                 {item.statLabel}
@@ -168,9 +151,13 @@ function TimelineCard({
 
           {/* Date & Location */}
           <div className="flex items-center gap-3 mb-4 text-white/40 text-xs">
-            <span>📅 {item.date}</span>
+            <span className="inline-flex items-center gap-1.5">
+              <Calendar size={12} strokeWidth={1.5} aria-hidden /> {item.date}
+            </span>
             <span>•</span>
-            <span>📍 {item.location}</span>
+            <span className="inline-flex items-center gap-1.5">
+              <MapPin size={12} strokeWidth={1.5} aria-hidden /> {item.location}
+            </span>
           </div>
 
           {/* Bullets */}
@@ -185,14 +172,14 @@ function TimelineCard({
               >
                 <span
                   className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0"
-                  style={{ background: item.color }}
+                  style={{ background: "rgba(255,255,255,0.3)" }}
                 />
                 {bullet}
               </motion.li>
             ))}
           </ul>
         </div>
-      </motion.div>
+      </ScrollSlide>
 
       {/* Timeline dot */}
       <div className="hidden md:flex flex-col items-center relative" style={{ minWidth: 40 }}>
@@ -202,8 +189,8 @@ function TimelineCard({
           transition={{ delay: 0.1, type: "spring", stiffness: 300 }}
           className="w-4 h-4 rounded-full z-10 mt-6"
           style={{
-            background: item.color,
-            boxShadow: `0 0 15px ${item.color}60, 0 0 30px ${item.color}30`,
+            background: "var(--gold)",
+            boxShadow: "0 0 0 4px #0A0908",
           }}
         />
       </div>
@@ -229,18 +216,18 @@ export default function Experience() {
       ref={sectionRef}
       className="relative z-10 pt-16 pb-16 overflow-hidden"
       style={{
-        background: "linear-gradient(180deg, rgba(3,3,8,0.82) 0%, rgba(6,3,24,0.78) 50%, rgba(3,3,8,0.82) 100%)",
+        background: "rgba(10,9,8,0.97)" /* #0A0908 — darker, richer step below Skills */,
       }}
     >
       <div className="max-w-5xl mx-auto px-6">
         {/* Header */}
-        <ClipReveal className="text-center mb-12">
-          <p className="text-xs font-semibold tracking-widest uppercase mb-4" style={{ color: "#00e5ff" }}>
+        <ScrollScale className="text-center mb-12">
+          <p className="text-xs font-semibold tracking-widest uppercase mb-4 text-gold-metal">
             Work History
           </p>
           <h2 className="section-heading text-white">Work Experience</h2>
-          <LineDraw className="mx-auto mt-8" style={{ maxWidth: 120 }} color="rgba(201,165,78,0.55)" />
-        </ClipReveal>
+          <LineDraw className="mx-auto mt-8" style={{ maxWidth: 120 }} color="rgba(184,144,62,0.55)" />
+        </ScrollScale>
 
         {/* Timeline */}
         <div className="relative">
@@ -251,7 +238,7 @@ export default function Experience() {
               className="absolute top-0 left-0 w-full"
               style={{
                 height: lineHeight,
-                background: "linear-gradient(180deg, #7040c0, #00e5ff, #c9a54e)",
+                background: "rgba(184,144,62,0.5)",
               }}
             />
           </div>

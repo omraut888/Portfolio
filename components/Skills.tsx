@@ -1,17 +1,17 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ClipReveal, LineDraw } from "./Reveal";
+import { LineDraw, ScrollScale } from "./Reveal";
 
 type Cat = "llm" | "ml" | "backend" | "cloud" | "data" | "langs";
 
-const CATEGORIES: { id: Cat; label: string; color: string }[] = [
-  { id: "llm",     label: "LLMs & RAG",         color: "#00e5ff" },
-  { id: "ml",      label: "ML & Deep Learning", color: "#7040c0" },
-  { id: "backend", label: "Backend & Infra",    color: "#2563eb" },
-  { id: "cloud",   label: "Cloud & DevOps",     color: "#00e5ff" },
-  { id: "data",    label: "Data & Analytics",   color: "#2563eb" },
-  { id: "langs",   label: "Languages",          color: "#7040c0" },
+const CATEGORIES: { id: Cat; label: string }[] = [
+  { id: "llm",     label: "LLMs & RAG", },
+  { id: "ml",      label: "ML & Deep Learning", },
+  { id: "backend", label: "Backend & Infra", },
+  { id: "cloud",   label: "Cloud & DevOps", },
+  { id: "data",    label: "Data & Analytics", },
+  { id: "langs",   label: "Languages", },
 ];
 
 const SKILLS: Record<Cat, string[]> = {
@@ -26,12 +26,10 @@ const SKILLS: Record<Cat, string[]> = {
 function SkillLine({
   name,
   category,
-  color,
   delay,
 }: {
   name: string;
   category: string;
-  color: string;
   delay: number;
 }) {
   return (
@@ -44,7 +42,7 @@ function SkillLine({
     >
       <span
         className="w-1.5 h-1.5 rounded-full flex-shrink-0 group-hover:animate-[skillPulse_1s_ease-in-out_infinite]"
-        style={{ background: color, boxShadow: `0 0 5px ${color}80` }}
+        style={{ background: "rgba(255,255,255,0.35)" }}
       />
       <span className="text-white/65 text-sm transition-colors duration-200 group-hover:text-white flex-shrink-0">
         {name}
@@ -64,17 +62,17 @@ export default function Skills() {
     <section
       id="skills"
       className="relative z-10 pt-16 pb-16 overflow-hidden"
-      style={{ background: "linear-gradient(180deg, rgba(3,3,8,0.82) 0%, rgba(6,3,24,0.78) 50%, rgba(3,3,8,0.82) 100%)" }}
+      style={{ background: "rgba(22,20,18,0.95)" /* warm charcoal — one value step above Experience */ }}
     >
       <div className="max-w-5xl mx-auto px-6">
         {/* Header */}
-        <ClipReveal className="text-center mb-12">
-          <p className="text-xs font-semibold tracking-widest uppercase mb-4" style={{ color: "#00e5ff" }}>
+        <ScrollScale className="text-center mb-12">
+          <p className="text-xs font-semibold tracking-widest uppercase mb-4 text-gold-metal">
             CAPABILITIES
           </p>
           <h2 className="section-heading text-white">Skills &amp; Technologies</h2>
-          <LineDraw className="mx-auto mt-8" style={{ maxWidth: 120 }} color="rgba(201,165,78,0.55)" />
-        </ClipReveal>
+          <LineDraw className="mx-auto mt-8" style={{ maxWidth: 120 }} color="rgba(184,144,62,0.55)" />
+        </ScrollScale>
 
         {/* Two-column masonry index */}
         <div className="columns-1 md:columns-2 gap-x-16">
@@ -85,10 +83,10 @@ export default function Skills() {
                 className="flex items-center gap-2.5 pb-2 mb-2"
                 style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}
               >
-                <span className="w-2 h-2 rounded-full" style={{ background: cat.color }} />
+                <span className="w-2 h-2 rounded-full" style={{ background: "rgba(255,255,255,0.5)" }} />
                 <span
                   className="text-[11px] font-semibold uppercase tracking-[0.2em] font-mono"
-                  style={{ color: cat.color }}
+                  style={{ color: "rgba(255,255,255,0.75)" }}
                 >
                   {cat.label}
                 </span>
@@ -100,7 +98,6 @@ export default function Skills() {
                   key={name}
                   name={name}
                   category={cat.label}
-                  color={cat.color}
                   delay={n++ * 0.03}
                 />
               ))}
