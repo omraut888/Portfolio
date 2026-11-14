@@ -7,6 +7,7 @@ import Navbar from "@/components/Navbar";
 import StarfieldBackground from "@/components/StarfieldBackground";
 import Hero from "@/components/Hero";
 import Marquee from "@/components/Marquee";
+import Scanlines from "@/components/Scanlines";
 import Stats from "@/components/Stats";
 import About from "@/components/About";
 import Skills from "@/components/Skills";
@@ -26,6 +27,7 @@ export default function Home() {
       <LoadingAnimation />
       <CustomCursor />
       <ScrollProgress />
+      <Scanlines />
       <Navbar />
 
       <main className="relative z-10">

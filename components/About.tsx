@@ -6,6 +6,7 @@ import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { useReducedMotionSafe } from "@/hooks/useReducedMotionSafe";
 import type { MotionValue } from "framer-motion";
 import { LineDraw, WordStagger } from "./Reveal";
+import RgbGlitch from "./RgbGlitch";
 
 const TERMINAL_LINES = [
   { cmd: "whoami",    out: "Om Raut, AI Engineer"                   },
@@ -78,7 +79,9 @@ function PortraitCard({ filter }: { filter: MotionValue<string> }) {
       className="group relative rounded-2xl overflow-hidden"
       style={{ width: 300, height: 440, boxShadow: "0 28px 70px rgba(26,24,22,0.28)", filter }}
     >
-      <Image src="/profile.jpg" alt="Om Raut" fill className="object-cover xray-photo" />
+      <RgbGlitch className="absolute inset-0">
+        <Image src="/profile.jpg" alt="Om Raut" fill className="object-cover xray-photo" />
+      </RgbGlitch>
       <div className="xray-line" />
       <div className="absolute inset-x-0 bottom-0 pointer-events-none" style={{ height: "55%", background: "linear-gradient(to top, rgba(0,0,0,0.85), transparent)" }} />
       <div className="absolute inset-x-0 top-0 pointer-events-none" style={{ height: "22%", background: "linear-gradient(to bottom, rgba(0,0,0,0.6), transparent)" }} />

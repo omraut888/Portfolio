@@ -253,6 +253,106 @@ section {
   filter: grayscale(1) contrast(1.15) brightness(0.9);
 }
 
+/* RGB-split glitch (components/RgbGlitch.tsx): filter applied only during bursts */
+.rgb-glitch.is-glitching {
+  filter: var(--rgb-filter);
+}
+@media (prefers-reduced-motion: reduce) {
+  .rgb-glitch.is-glitching { filter: none; }
+}
+
+/* CRT scanlines (components/Scanlines.tsx). Sits above section backgrounds so
+   it reaches the opaque cream/charcoal sections too, but below the nav (8000),
+   progress bar and cursor; pointer-events: none so it never blocks clicks.
+   Very low strength on purpose: texture, not an effect. */
+.scanlines {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  overflow: hidden;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 2px,
+    rgba(0, 0, 0, 0.04) 2px,
+    rgba(0, 0, 0, 0.04) 4px
+  );
+}
+.scanline-band {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 120px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(255, 255, 255, 0.035) 50%,
+    transparent 100%
+  );
+  animation: scanline-sweep 6s linear infinite;
+  will-change: transform;
+}
+@keyframes scanline-sweep {
+  from { transform: translateY(-10vh); }
+  to { transform: translateY(110vh); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scanlines { display: none; }
+}
+
+/* Glitch text on hover (components/GlitchText.tsx). Two copies of the text
+   (::before cyan-tinted, ::after crimson) clipped to jumping horizontal bands
+   and offset a few px, only while hovered. `/ ""` gives the generated text an
+   empty accessible name so screen readers don't read the word three times. */
+.glitch {
+  position: relative;
+  display: inline-block;
+}
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  content: attr(data-text) / "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  white-space: nowrap;
+}
+.glitch::before { color: rgba(0, 229, 255, 0.85); }
+.glitch::after { color: var(--accent); }
+.glitch:hover::before,
+.glitch-host:hover .glitch::before {
+  opacity: 1;
+  animation: glitch-band-a 0.3s steps(1, end) infinite;
+}
+.glitch:hover::after,
+.glitch-host:hover .glitch::after {
+  opacity: 1;
+  animation: glitch-band-b 0.3s steps(1, end) infinite;
+}
+@keyframes glitch-band-a {
+  0%   { clip-path: inset(8% 0 72% 0);  transform: translate(-3px, 0); }
+  20%  { clip-path: inset(58% 0 18% 0); transform: translate(3px, 0); }
+  40%  { clip-path: inset(30% 0 48% 0); transform: translate(-2px, 0); }
+  60%  { clip-path: inset(78% 0 4% 0);  transform: translate(2px, 0); }
+  80%  { clip-path: inset(42% 0 36% 0); transform: translate(-3px, 0); }
+  100% { clip-path: inset(14% 0 66% 0); transform: translate(1px, 0); }
+}
+@keyframes glitch-band-b {
+  0%   { clip-path: inset(66% 0 12% 0); transform: translate(3px, 0); }
+  20%  { clip-path: inset(10% 0 74% 0); transform: translate(-3px, 0); }
+  40%  { clip-path: inset(48% 0 30% 0); transform: translate(2px, 0); }
+  60%  { clip-path: inset(22% 0 60% 0); transform: translate(-2px, 0); }
+  80%  { clip-path: inset(82% 0 2% 0);  transform: translate(3px, 0); }
+  100% { clip-path: inset(36% 0 44% 0); transform: translate(-1px, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .glitch::before,
+  .glitch::after { display: none; }
+}
+
 /* Hero → content ticker (components/Marquee.tsx). ~40s per loop, paused on hover. */
 .marquee {
   position: relative;

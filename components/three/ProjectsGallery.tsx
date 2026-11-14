@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CountUp, ScrollSlide } from "../Reveal";
+import GlitchText from "../GlitchText";
 
 interface Metric { value: string; label: string }
 
@@ -147,7 +148,7 @@ function ProjectCard({
         onClick={hasDetail ? onToggle : undefined}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
-        className="flex items-start gap-6 md:gap-12"
+        className="glitch-host flex items-start gap-6 md:gap-12"
         style={{
           position: "relative",
           cursor: hasDetail ? "pointer" : "default",
@@ -159,17 +160,17 @@ function ProjectCard({
       >
         <div style={{ flex: "1 1 auto", minWidth: 0 }}>
           <div
-            className={active ? "text-accent" : undefined}
             style={{
               fontFamily: "var(--font-display)",
               fontSize: "clamp(32px, 4vw, 52px)",
               fontWeight: 400,
               lineHeight: 1.05,
               letterSpacing: "-0.01em",
-              color: "#ffffff",
+              color: active ? ACCENT : "#ffffff",
+              transition: "color 0.4s",
             }}
           >
-            {project.title}
+            <GlitchText text={project.title} />
           </div>
           <div style={{ marginTop: 14, fontSize: 15, color: "rgba(255,255,255,0.42)", lineHeight: 1.6, maxWidth: 540 }}>
             {project.tagline}
@@ -186,11 +187,10 @@ function ProjectCard({
             </div>
           ))}
           <div
-            className={active ? "text-accent" : undefined}
             style={{
               marginTop: 8,
               fontSize: 12,
-              color: "rgba(255,255,255,0.3)",
+              color: active ? ACCENT : "rgba(255,255,255,0.3)",
               fontFamily: "var(--font-mono)",
               transition: "color 0.3s",
             }}

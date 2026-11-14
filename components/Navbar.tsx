@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useMagnetic } from "@/hooks/useMagnetic";
+import GlitchText from "./GlitchText";
 
 const sections = ["hero", "about", "skills", "experience", "projects", "education", "contact"];
 const labels = ["Home", "About", "Skills", "Experience", "Projects", "Education", "Contact"];
@@ -84,7 +85,7 @@ export default function Navbar() {
             <motion.button
               key={id}
               onClick={() => scrollTo(id)}
-              className={`relative px-4 py-2 text-sm font-medium rounded-full transition-colors duration-200 ${
+              className={`glitch-host relative px-4 py-2 text-sm font-medium rounded-full transition-colors duration-200 ${
                 activeSection === id
                   ? "text-white"
                   : "text-white/50 hover:text-accent"
@@ -104,7 +105,7 @@ export default function Navbar() {
                 />
               )}
               <span className={`relative z-10 ${activeSection === id ? "" : "link-accent"}`}>
-                {labels[i]}
+                <GlitchText text={labels[i]} />
               </span>
             </motion.button>
           ))}
